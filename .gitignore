@@ -6,6 +6,8 @@ node_modules
 .env.local
 .env.*.local
 
+/src/chatranslate-8e07b68822a3.json
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
