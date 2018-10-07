@@ -7,6 +7,7 @@ import './registerServiceWorker'
 import firebase from "firebase/app";
 import 'firebase/firestore';
 import * as firebaseui from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
 
 const config = {
   apiKey: "AIzaSyAbIgWIKY02k19aYWM_TP4q0tdggcZ3qqM",
@@ -17,9 +18,23 @@ const config = {
   messagingSenderId: "666806704863"
 };
 
+const uiConfig = {
+	signInSuccessUrl: '/about',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+  ],
+  tosUrl: '/about',
+  privacyPolicyUrl: function() {
+    window.location.assign('/about');
+  }
+}
+
 firebase.initializeApp(config);
 
-console.log(firebase.app(), firebaseui);
+let ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+ui.start('#firebaseui-auth-container', uiConfig);
 
 Vue.config.productionTip = false
 
