@@ -5,11 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
-		authUi: null
+		authUi: null,
+		authInitiated: false,
+		user: null
 	},
 	mutations: {
 		setAuthUi(state, payload) {
 			state.authUi = payload.authInstance;
+		},
+		setUser(state, payload) {
+			state.authInitiated = true;
+			state.user = payload.user;
 		}
 	},
 	actions: {

@@ -23,6 +23,14 @@ firebase.initializeApp(config);
 let ui = new firebaseui.auth.AuthUI(firebase.auth());
 store.commit('setAuthUi', {authInstance: ui});
 
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    store.commit('setUser', {user: user});
+  } else {
+    store.commit('setUser', {user: null});
+  }
+});
+
 Vue.config.productionTip = false
 
 new Vue({

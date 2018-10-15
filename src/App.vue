@@ -3,11 +3,36 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
-      <router-link to="/sign-in">Sign in</router-link>
+      <router-link to="/sign-in" v-if="sharedState.authInitiated && !sharedState.user">Sign in</router-link>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+  import store from './store';
+
+  export default {
+    name: 'app',
+    components: {
+      
+    },
+    data() {
+      return {
+        sharedState: store.state
+      }
+    },
+    mounted() {
+      console.log('app mounted', this.sharedState.user);
+    },
+    methods: {
+      
+    },
+    watch: {
+      
+    }
+  }
+</script>
 
 <style lang="scss">
 #app {
