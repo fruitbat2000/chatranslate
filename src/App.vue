@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/sign-in" v-if="sharedState.authInitiated && !sharedState.user">Sign in</router-link>
+      <button class="btn--link" v-if="sharedState.authInitiated && sharedState.user" @click="signOut">Sign out</button>
     </div>
     <router-view/>
   </div>
@@ -11,6 +12,7 @@
 
 <script>
   import store from './store';
+  import firebase from "firebase/app";
 
   export default {
     name: 'app',
@@ -26,7 +28,9 @@
       console.log('app mounted', this.sharedState.user);
     },
     methods: {
-      
+      signOut() {
+        firebase.auth().signOut();
+      }
     },
     watch: {
       
