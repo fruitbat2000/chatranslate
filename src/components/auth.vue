@@ -7,15 +7,6 @@
 	import firebase from "firebase/app";
 	
 	const uiConfig = {
-		callbacks: {
-			signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-				console.log('signIn successful');
-				return true;
-			},
-			uiShown: function() {
-				console.log('widget rendered');
-			}
-		},
 		signInSuccessUrl: '/',
 		signInOptions: [
 			firebase.auth.GoogleAuthProvider.PROVIDER_ID,
