@@ -36,6 +36,7 @@ export default new Vuex.Store({
 					let user = {
 						contacts: [], 
 						chats: [],
+						pendingInvites: [],
 						displayName: payload.user.displayName,
 						email: payload.user.email,
 						verified: payload.user.emailVerified,

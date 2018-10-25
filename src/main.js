@@ -35,7 +35,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     store.dispatch('getUser', {user: user});
   } else {
-    store.commit('setUser', {user: null});
+    store.commit('setUser', null);
   }
 });
 
