@@ -7,7 +7,8 @@ export default new Vuex.Store({
 	state: {
 		authUi: null,
 		authInitiated: false,
-		user: null
+		user: null,
+		db: null
 	},
 	mutations: {
 		setAuthUi(state, payload) {
@@ -16,6 +17,10 @@ export default new Vuex.Store({
 		setUser(state, payload) {
 			state.authInitiated = true;
 			state.user = payload.user;
+		},
+		setDbInstance(state, payload) {
+			state.db = payload.db;
+			console.log(state.db);
 		}
 	},
 	actions: {

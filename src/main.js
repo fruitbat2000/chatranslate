@@ -31,6 +31,14 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 });
 
+const db = firebase.firestore();
+
+db.settings({
+  timestampsInSnapshots: true
+});
+
+store.commit('setDbInstance', {db: db});
+
 Vue.config.productionTip = false
 
 new Vue({
