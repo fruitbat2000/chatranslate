@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import store from './store';
+  import store from '@/store';
   import firebase from "firebase/app";
 
   export default {
@@ -30,6 +30,7 @@
     methods: {
       signOut() {
         firebase.auth().signOut();
+        this.$router.push('/');
       }
     },
     watch: {
