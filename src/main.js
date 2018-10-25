@@ -20,17 +20,6 @@ const config = {
 
 firebase.initializeApp(config);
 
-let ui = new firebaseui.auth.AuthUI(firebase.auth());
-store.commit('setAuthUi', {authInstance: ui});
-
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    store.commit('setUser', {user: user});
-  } else {
-    store.commit('setUser', {user: null});
-  }
-});
-
 const db = firebase.firestore();
 
 db.settings({
@@ -38,6 +27,17 @@ db.settings({
 });
 
 store.commit('setDbInstance', {db: db});
+
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+store.commit('setAuthUi', {authInstance: ui});
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    store.dispatch('getUser', {user: user});
+  } else {
+    store.commit('setUser', {user: null});
+  }
+});
 
 Vue.config.productionTip = false
 

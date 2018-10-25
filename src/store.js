@@ -16,14 +16,45 @@ export default new Vuex.Store({
 		},
 		setUser(state, payload) {
 			state.authInitiated = true;
-			state.user = payload.user;
+			state.user = payload;
 		},
 		setDbInstance(state, payload) {
 			state.db = payload.db;
-			console.log(state.db);
 		}
 	},
 	actions: {
+		getUser({commit, state}, payload) {
+			let userDoc = state.db.collection('users').doc(payload.user.uid);
 
+			userDoc.get().then(function(doc) {
+				if (doc.exists) {
+
+					commit('setUser', doc.data());
+
+				} else {
+
+					let user = {
+						contacts: [], 
+						chats: [],
+						displayName: payload.user.displayName,
+						email: payload.user.email,
+						verified: payload.user.emailVerified,
+						phoneNumber: payload.user.phoneNumber,
+						providerData: payload.user.providerData,
+						uid: payload.user.uid
+					}
+
+					userDoc.set(user).then(function(doc) {
+    				commit('setUser', doc.data());
+					})
+					.catch(function(error) {
+    				console.error("Error writing document: ", error);
+					});
+					
+				}
+			}).catch(function(error) {
+				 console.log("Error getting document:", error);
+			});
+		}
 	}
 })
