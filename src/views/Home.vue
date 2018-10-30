@@ -1,17 +1,18 @@
 <template>
 	<div class="home">
-		<p v-if="user">Hello {{user.displayName}}!</p>
+		<dashboard v-if="user"></dashboard>
 		<p v-if="!user">Hello there! You need to <router-link to="/sign-in">sign-in</router-link> to continue</p>
 	</div>
 </template>
 
 <script>
 import store from '@/store';
+import dashboard from '@/components/dashboard'
 
 export default {
 	name: 'home',
 	components: {
-
+		dashboard
 	},
 	data() {
 		return {

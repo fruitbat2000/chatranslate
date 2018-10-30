@@ -1,0 +1,32 @@
+<template>
+	<div class="dashboard">
+		<h2>Yo, {{user.displayName}}! Welcome to your dashboard</h2>
+		<div class="chats">
+			<ul v-if="user.chats.length > 0" class="chats__list"></ul>
+			<div v-else class="chats__no-chats">You have no active conversations. Start chatting with someone by clicking the button below. Or <router-link to="/invite">invite</router-link> someone new to chat with.</div>
+			<button class="btn btn--primary chats__start-chat"><span>New chat</span></button>
+		</div>
+	</div>
+</template>
+
+<script>
+import store from '@/store';
+
+export default {
+	name: 'dashboard',
+	components: {
+
+	},
+	data() {
+		return {
+			user: this.$store.state.user
+		}
+	},
+	mounted() {
+		console.log('dashboard mounted');
+	},
+	computed: {
+		
+	}
+}
+</script>
