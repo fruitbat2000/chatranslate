@@ -1,37 +1,31 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/sign-in" v-if="sharedState.authInitiated && !sharedState.user">Sign in</router-link>
-      <button class="btn--link" v-if="sharedState.authInitiated && sharedState.user" @click="signOut">Sign out</button>
-    </div>
+    <main-header></main-header>
+    <main-nav></main-nav>
     <router-view/>
   </div>
 </template>
 
 <script>
-  import store from '@/store';
-  import firebase from "firebase/app";
+  import mainHeader from '@/components/mainHeader';
+  import mainNav from '@/components/mainNav';
 
   export default {
     name: 'app',
     components: {
-      
+      mainHeader,
+      mainNav
     },
     data() {
       return {
-        sharedState: store.state
+        
       }
     },
     mounted() {
-      console.log('app mounted', this.sharedState.user);
+      console.log('app mounted');
     },
     methods: {
-      signOut() {
-        firebase.auth().signOut();
-        this.$router.push('/');
-      }
+      
     },
     watch: {
       
@@ -42,14 +36,4 @@
 <style lang="scss">
   @import './assets/sass/base';
 
-  #nav {
-    padding: 30px;
-    a {
-      font-weight: bold;
-      color: #2c3e50;
-      &.router-link-exact-active {
-        color: #42b983;
-      }
-    }
-  }
 </style>

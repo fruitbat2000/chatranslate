@@ -1,0 +1,34 @@
+.btn {
+	background-color: $primaryDark;
+	border: none;
+	border-radius: 2px;
+	box-shadow: none;
+	padding: 5px 10px;
+	transition: all 0.3s ease-in-out;
+
+	.material-icons {
+		display: block;
+	}
+
+	&.btn--primary {
+		background-color: $secondary;
+		color: $secondaryText;
+
+		&:hover {
+			background-color: darken($secondary, 10%);
+		}
+	}
+
+	&.btn--secondary {
+		background-color: $primaryDark;
+
+		&:hover {
+			background-color: darken($primaryDark, 10%);
+		}
+	}
+
+	&.btn--round {
+		border-radius: 50%;
+		padding: 8px;
+	}
+}
