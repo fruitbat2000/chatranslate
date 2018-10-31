@@ -7,6 +7,7 @@ node_modules
 .env.*.local
 
 /src/chatranslate-8e07b68822a3.json
+/functions/mailgun.config.json
 
 # Log files
 npm-debug.log*

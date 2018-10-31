@@ -8,7 +8,7 @@
 import store from '@/store';
 
 export default {
-	name: 'home',
+	name: 'invite',
 	components: {
 	},
 	data() {
