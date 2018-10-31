@@ -3,6 +3,7 @@
 		<h2>invite your friends to chat</h2>
 		<form>
 			<input type="email" name="email" id="email" placeholder="Enter email address" v-model="email">
+			<span v-if="validated && !emailValid">Please enter a valid email address</span>
 			<button @click.prevent="createInvite">Submit</button>
 		</form>
 	</div>
@@ -31,10 +32,22 @@ export default {
 			this.validated = true;
 			if (this.emailValid) {
 				let invite = {
-					from: this.$store.state.user.uid,
+					fromUid: this.$store.state.user.uid,
+					fromName: this.$store.state.user.displayName,
+					fromEmail: this.$store.state.user.email,
 					timestamp: Date.now(),
 					to: this.email
 				}
+
+				this.db.collection('invites').add(invite)
+					.then((docRef) => {
+						console.log('yay!', docRef)
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+
+
 				console.log(invite);
 			}
 		}
