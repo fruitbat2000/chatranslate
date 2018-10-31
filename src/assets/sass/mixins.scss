@@ -1,0 +1,15 @@
+@mixin font-size($sizeValue: 16) {
+  font-size: $sizeValue + px;
+  font-size: ($sizeValue / 10) + rem;
+}
+
+%visually-hidden {
+	border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}

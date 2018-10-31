@@ -1,0 +1,31 @@
+// color variables
+$white: #fff;
+$black: #000;
+
+$primary: #e0f2f1;
+$primaryLight: #fff;
+$primaryDark: #aebfbe;
+$primaryText: #000;
+
+$secondary: #d81b60;
+$secondaryLight: #ff5c8d;
+$secondaryDark: #a00037;
+$secondaryText: #fff;
+
+$surface: #F5F5F6;
+
+
+// font-family;
+$openReg: 'openReg', Helvetica, Arial, sans-serif;
+$openItalic: 'openItalic', Helvetica, Arial sans-serif;
+$montReg: 'montReg', Helvetica, Arial, sans-serif;
+$montItalic: 'montItalic', Helvetica, Arial, sans-serif;
+$montBold: 'montBold', Helvetica, Arial, sans-serif; 
+$montBoldItalic: 'montBoldItalic', Helvetica, Arial, sans-serif; 
+
+// breakpoints
+$bp-xs: 0;
+$bp-sm: 321px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1440px;

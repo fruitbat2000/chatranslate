@@ -1,0 +1,39 @@
+[v-cloak] {
+	display: none;
+}
+
+body {
+	background-color: $surface;
+	position: relative;
+}
+
+::-ms-clear,
+::-ms-reveal {
+	display: none;
+}
+
+.no-js-msg {
+	display: none;
+}
+
+.no-js .no-js-msg {
+	display: block;
+	text-align: center;
+}
+
+button {
+	background: transparent;
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+}
+
+figure {
+	margin: 0;
+	overflow: hidden;
+
+	img {
+		height: auto;
+		width: 100%;
+	}
+}
