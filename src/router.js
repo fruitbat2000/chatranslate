@@ -39,12 +39,9 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (!firebase.auth().currentUser && to.name !== 'signIn') {
+  if (!firebase.auth().currentUser && to.name !== 'signIn' && to.name !== 'home') {
     store.commit('setRedirectUrl', to);
     next('/sign-in');
-  } else if (to.name === 'signIn' && !store.state.redirectUrl) {
-    store.commit('setRedirectUrl', {path: '/'});
-    next();
   } else {
     next();
   }

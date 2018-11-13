@@ -26,6 +26,7 @@
 			signOut() {
 				firebase.auth().signOut();
 				this.$router.push('/');
+				this.$store.commit('setRedirectUrl', {path: '/'});
 			}
 		},
 		watch: {

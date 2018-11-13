@@ -23,8 +23,9 @@ export default new Vuex.Store({
 			state.db = payload.db;
 		},
 		setRedirectUrl(state, payload) {
-			console.log('setRedirectUrl', payload);
+			console.log('setRedirect', payload);
 			state.redirectUrl = payload.path
+			localStorage.setItem('redirectUrl', payload.path);
 		}
 	},
 	actions: {
@@ -51,15 +52,15 @@ export default new Vuex.Store({
 					}
 
 					userDoc.set(user).then(function(doc) {
-    				commit('setUser', doc.data());
+						commit('setUser', doc.data());
 					})
 					.catch(function(error) {
-    				console.error("Error writing document: ", error);
+						console.error("Error writing document: ", error);
 					});
 					
 				}
 			}).catch(function(error) {
-				 console.log("Error getting document:", error);
+				console.log("Error getting document:", error);
 			});
 		}
 	}

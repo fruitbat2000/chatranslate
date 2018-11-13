@@ -13,7 +13,7 @@
 		data() {
 			return {
 				config: {
-					signInSuccessUrl: this.$store.state.redirectUrl,
+					signInSuccessUrl: localStorage.getItem('redirectUrl'),
 					signInOptions: [
 						firebase.auth.GoogleAuthProvider.PROVIDER_ID,
 						firebase.auth.EmailAuthProvider.PROVIDER_ID
@@ -27,8 +27,6 @@
 			}
 		},
 		mounted() {
-			console.log('auth mounted');
-			console.log(this.$store.state.redirectUrl);
 			this.ui.start('#firebaseui-auth-container', this.config);
 		},
 		methods: {
