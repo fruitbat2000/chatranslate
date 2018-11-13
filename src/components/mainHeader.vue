@@ -1,6 +1,8 @@
 <template>
 	<header class="main-header">
-		<h1 class="logotype">fluentsy</h1>
+		<router-link to="/">
+			<h1 class="logotype">fluentsy</h1>
+		</router-link>
 		<router-link to="/sign-in" v-if="$store.state.authInitiated && !$store.state.user">Sign in</router-link>
 		<button class="btn--link" v-if="$store.state.authInitiated && $store.state.user" @click="signOut">Sign out</button>
 	</header>
@@ -44,6 +46,10 @@
 		display: flex;
 		justify-content: space-between;
 		padding: 20px;
+
+		a {
+			text-decoration: none;
+		}
 
 		.logotype {
 			@include font-size(36);

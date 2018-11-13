@@ -5,8 +5,8 @@
 			<user-card v-if="invite" :uid="invite.fromUid" class="layer-1"></user-card>
 			<p>Date invited: {{invite.timestamp | prettyDate}}</p>
 			<div class="actions">
-				<button class="btn btn--primary layer-1">Accept</button>
-				<button class="btn btn--secondary layer-1">Decline</button>
+				<button @click="acceptInvite" class="btn btn--primary layer-1">Accept</button>
+				<button @click="declineInvite" class="btn btn--secondary layer-1">Decline</button>
 			</div>
 		</div>
 		<p v-if="doesNotExist">Sorry, this invite does not seem to be valid</p>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
 import userCard from '@/components/userCard'
 
 export default {
@@ -60,6 +61,28 @@ export default {
 				this.invite = data;
 			}
 			
+		},
+		acceptInvite() {
+			console.log('acceptInvite: update both users contact lists, delete invite and redirect to contacts');
+			let currentUserDoc = this.db.collection('users').doc(this.$store.state.user.uid),
+					inviterDoc = this.db.collection('users').doc(this.invite.fromUid),
+					invDoc = this.db.collection('invites').doc(this.$route.params.id),
+					_this = this;
+
+			currentUserDoc.update({
+				contacts: firebase.firestore.FieldValue.arrayUnion(this.invite.fromUid)
+			});
+
+			inviterDoc.update({
+				contacts: firebase.firestore.FieldValue.arrayUnion(this.$store.state.user.uid)
+			});
+
+		},
+		declineInvite() {
+			console.log('declineInvite: delete invite and redirect to home');
+		},
+		deleteInvite() {
+			console.log('deleteInvite');
 		}
 	},
 	computed: {

@@ -19,6 +19,9 @@ export default new Vuex.Store({
 			state.authInitiated = true;
 			state.user = payload;
 		},
+		updateUser(state, payload) {
+			state.user[payload.property] = payload.value;
+		},
 		setDbInstance(state, payload) {
 			state.db = payload.db;
 		},
@@ -54,8 +57,9 @@ export default new Vuex.Store({
 						joined: Date.now()
 					}
 
-					userDoc.set(user).then(function(doc) {
-						commit('setUser', doc.data());
+					userDoc.set(user).then(function() {
+						// might be better to grab the data back from the db?
+						commit('setUser', user);
 					})
 					.catch(function(error) {
 						console.error("Error writing document: ", error);
