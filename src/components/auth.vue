@@ -3,20 +3,7 @@
 </template>
 
 <script>
-	import store from '@/store';
 	import firebase from "firebase/app";
-	
-	const uiConfig = {
-		signInSuccessUrl: '/',
-		signInOptions: [
-			firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-			firebase.auth.EmailAuthProvider.PROVIDER_ID
-		],
-		tosUrl: '/about',
-		privacyPolicyUrl: function() {
-			window.location.assign('/about');
-		}
-	}
 
 	export default {
 		name: 'auth',
@@ -25,12 +12,24 @@
 		},
 		data() {
 			return {
-				ui: store.state.authUi
+				config: {
+					signInSuccessUrl: this.$store.state.redirectUrl,
+					signInOptions: [
+						firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+						firebase.auth.EmailAuthProvider.PROVIDER_ID
+					],
+					tosUrl: '/about',
+					privacyPolicyUrl: function() {
+						window.location.assign('/about');
+					}
+				},
+				ui: this.$store.state.authUi
 			}
 		},
 		mounted() {
 			console.log('auth mounted');
-			this.ui.start('#firebaseui-auth-container', uiConfig);
+			console.log(this.$store.state.redirectUrl);
+			this.ui.start('#firebaseui-auth-container', this.config);
 		},
 		methods: {
 			

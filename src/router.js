@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import firebase from "firebase/app";
+import store from '@/store';
 
 Vue.use(Router)
 
@@ -32,14 +33,18 @@ const router = new Router({
     {
       path: '/invite/:id',
       name: 'acceptInvite',
-      component: () => import('./views/invite.vue')
+      component: () => import('./views/acceptInvite.vue')
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
   if (!firebase.auth().currentUser && to.name !== 'signIn') {
+    store.commit('setRedirectUrl', to);
     next('/sign-in');
+  } else if (to.name === 'signIn' && !store.state.redirectUrl) {
+    store.commit('setRedirectUrl', {path: '/'});
+    next();
   } else {
     next();
   }

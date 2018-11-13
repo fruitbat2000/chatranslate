@@ -8,7 +8,8 @@ export default new Vuex.Store({
 		authUi: null,
 		authInitiated: false,
 		user: null,
-		db: null
+		db: null,
+		redirectUrl: null
 	},
 	mutations: {
 		setAuthUi(state, payload) {
@@ -20,6 +21,10 @@ export default new Vuex.Store({
 		},
 		setDbInstance(state, payload) {
 			state.db = payload.db;
+		},
+		setRedirectUrl(state, payload) {
+			console.log('setRedirectUrl', payload);
+			state.redirectUrl = payload.path
 		}
 	},
 	actions: {
