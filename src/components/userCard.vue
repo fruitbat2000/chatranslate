@@ -1,7 +1,8 @@
 <template>
 	<div class="user-card">
 		<template v-if="user && userLoaded">
-			<img class="user-card__image" src="" alt="">
+			<img v-if="user.avatar" class="user-card__image" :src="user.avatar" alt="">
+			<i v-else class="material-icons no-avatar">person</i>
 			<div class="user-card__info">
 				<h3>{{user.displayName}}</h3>
 				<p>Member since: {{user.joined | prettyDate}}</p>
@@ -70,5 +71,36 @@
 	@import '../assets/sass/variables';
 	@import '../assets/sass/mixins';
 
+	.user-card {
+		align-items: center;
+		background-color: $white;
+		border-bottom-left-radius: 40px;
+		border-bottom-right-radius: 3px;
+		border-top-left-radius: 40px;
+		border-top-right-radius: 3px;
+		display: flex;
+		height: 80px;
+
+		.user-card__image,
+		.no-avatar {
+			border-radius: 50%;
+			height: 76px;
+			margin-left: 2px;
+			margin-top: 1px;
+			width: 76px;
+		}
+
+		.user-card__info {
+			padding: 5px 5px 5px 20px;
+
+			h3, p {
+				margin: 0;
+			}
+
+			p {
+				@include font-size(12);
+			}
+		}
+	}
 	
 </style>

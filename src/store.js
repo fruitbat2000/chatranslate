@@ -44,6 +44,7 @@ export default new Vuex.Store({
 						chats: [],
 						pendingInvites: [],
 						avatar: null,
+						primaryLanguage: null,
 						displayName: payload.user.displayName,
 						email: payload.user.email,
 						verified: payload.user.emailVerified,

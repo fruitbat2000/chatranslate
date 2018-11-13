@@ -37,3 +37,20 @@ figure {
 		width: 100%;
 	}
 }
+
+.layer-1,
+.btn.layer-1 {
+	box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.4);
+}
+
+.no-avatar {
+	@include font-size(60);
+	background-color: $primary;
+	border-radius: 50%;
+	box-sizing: border-box;
+	color: $primaryDark;
+	height: 76px;
+	overflow: hidden;
+	padding: 7px;
+	width: 76px;
+}
