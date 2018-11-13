@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import firebase from "firebase/app";
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -27,6 +28,22 @@ export default new Router({
       path: '/invite',
       name: 'invite',
       component: () => import('./views/invite.vue')
+    },
+    {
+      path: '/invite/:id',
+      name: 'acceptInvite',
+      component: () => import('./views/invite.vue')
     }
   ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+  if (!firebase.auth().currentUser && to.name !== 'signIn') {
+    next('/sign-in');
+  } else {
+    next();
+  }
+  
+});
+
+export default router

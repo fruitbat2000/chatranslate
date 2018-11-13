@@ -26,10 +26,30 @@ db.settings({
   timestampsInSnapshots: true
 });
 
+db.enablePersistence()
+  .catch(function(err) {
+    if (err.code == 'failed-precondition') {
+      console.log(err.code);
+    } else if (err.code == 'unimplemented') {
+      console.log(err.code);
+    }
+  });
+
 store.commit('setDbInstance', {db: db});
 
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 store.commit('setAuthUi', {authInstance: ui});
+
+let firstLoad = true;
+
+function init() {
+  new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount('#app')
+  firstLoad = false;
+}
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -37,12 +57,10 @@ firebase.auth().onAuthStateChanged(function(user) {
   } else {
     store.commit('setUser', null);
   }
+
+  if (firstLoad) {
+    init();
+  }
 });
 
-Vue.config.productionTip = false
-
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+Vue.config.productionTip = false;

@@ -1,6 +1,7 @@
 <template>
 	<div class="invite">
 		<h2>invite your friends to chat</h2>
+		<p v-if="$route.params.id">{{$route.params.id}} {{$route.name}}</p>
 		<form>
 			<input type="email" name="email" id="email" placeholder="Enter email address" v-model="email">
 			<span v-if="validated && !emailValid">Please enter a valid email address</span>

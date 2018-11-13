@@ -24,11 +24,12 @@ exports.sendInvite = functions.firestore
 	.document('invites/{inviteId}')
 	.onCreate((snap, context) => {
 		const invite = snap.data();
+		console.log(snap.id);
 		let data = {
-			from: 'Fluentsy <noreply@fluensy.app>',
+			from: 'Fluentsy <noreply@fluentsy.app>',
 			to: invite.to,
 			subject: 'You have a new invite on Fluentsy',
-			text: 'Hi there!, '+invite.fromName+'('+invite.fromEmail+') wants to chat with you on Fluentsy. Use the link below to accept their invite and start a conversation...'
+			text: 'Hi there!, '+invite.fromName+'('+invite.fromEmail+') wants to chat with you on Fluentsy. Use the link below to accept their invite and start a conversation... \n http://localhost:8080/invite/'+snap.id
 		};
 
 		console.log(invite, data);

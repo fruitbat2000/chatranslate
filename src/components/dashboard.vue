@@ -31,8 +31,6 @@ export default {
 </script>
 <style lang="scss">
 	.dashboard {
-		padding: 20px;
-
 		.chats__start-chat {
 			bottom:  40px;
 			position: fixed;

@@ -2,7 +2,9 @@
   <div id="app">
     <main-header></main-header>
     <main-nav></main-nav>
-    <router-view/>
+    <main>
+      <router-view/>
+    </main>
   </div>
 </template>
 
@@ -36,4 +38,7 @@
 <style lang="scss">
   @import './assets/sass/base';
 
+  main {
+    padding: 20px;
+  }
 </style>
