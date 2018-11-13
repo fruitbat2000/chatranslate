@@ -41,6 +41,9 @@ const ui = new firebaseui.auth.AuthUI(firebase.auth());
 store.commit('setAuthUi', {authInstance: ui});
 
 let firstLoad = true;
+if (!localStorage.redirectUrl) {
+  localStorage.setItem('redirectUrl', '/');
+}
 
 function init() {
   new Vue({

@@ -43,12 +43,14 @@ export default new Vuex.Store({
 						contacts: [], 
 						chats: [],
 						pendingInvites: [],
+						avatar: null,
 						displayName: payload.user.displayName,
 						email: payload.user.email,
 						verified: payload.user.emailVerified,
 						phoneNumber: payload.user.phoneNumber,
 						providerData: payload.user.providerData,
-						uid: payload.user.uid
+						uid: payload.user.uid,
+						joined: Date.now()
 					}
 
 					userDoc.set(user).then(function(doc) {

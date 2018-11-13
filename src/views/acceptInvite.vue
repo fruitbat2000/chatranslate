@@ -2,6 +2,7 @@
 	<div class="accept-invite">
 		<div v-if="invite">
 			<h2>{{invite.fromName}} wants to chat!</h2>
+			<user-card v-if="invite" :uid="invite.fromUid"></user-card>
 			<p>Date invited: {{invite.timestamp | prettyDate}}</p>
 		</div>
 		<p v-if="doesNotExist">Sorry, this invite does not seem to be valid</p>
@@ -10,10 +11,12 @@
 </template>
 
 <script>
+import userCard from '@/components/userCard'
 
 export default {
 	name: 'acceptInvite',
 	components: {
+		userCard
 	},
 	data() {
 		return {
