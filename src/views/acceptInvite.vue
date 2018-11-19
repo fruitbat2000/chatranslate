@@ -66,8 +66,7 @@ export default {
 			console.log('acceptInvite: update both users contact lists, delete invite and redirect to contacts');
 			let currentUserDoc = this.db.collection('users').doc(this.$store.state.user.uid),
 					inviterDoc = this.db.collection('users').doc(this.invite.fromUid),
-					invDoc = this.db.collection('invites').doc(this.$route.params.id),
-					_this = this;
+					invDoc = this.db.collection('invites').doc(this.$route.params.id);
 
 			currentUserDoc.update({
 				contacts: firebase.firestore.FieldValue.arrayUnion(this.invite.fromUid)

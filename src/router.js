@@ -34,6 +34,11 @@ const router = new Router({
       path: '/invite/:id',
       name: 'acceptInvite',
       component: () => import('./views/acceptInvite.vue')
+    },
+    {
+      path: '/contacts',
+      name: 'contacts',
+      component: () => import('./views/contacts.vue')
     }
   ]
 });

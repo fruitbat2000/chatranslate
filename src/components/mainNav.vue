@@ -1,9 +1,9 @@
 <template>
 	<nav class="main-nav">
 		<ul>
-			<li class="active"><router-link to="/">Chats</router-link></li>
-			<li><a href="">Contacts</a></li>
-			<li><a href="">Invites</a></li>
+			<li><router-link to="/">Chats</router-link></li>
+			<li><router-link to="/contacts">Contacts</router-link></li>
+			<li><router-link to="/invite">Invites</router-link></li>
 		</ul>
 	</nav>
 </template>
@@ -43,27 +43,27 @@
 				display: inline-block;
 				position: relative;
 
-				&:after {
-					background-color: transparent;
-					bottom: 0;
-					content: '';
-					display: block;
-					height: 3px;
-					left: 0;
-					position: absolute;
-					width: 100%;
-				}
-
 				a {
 					color: $primaryText;
 					display: block;
 					padding: 10px 20px;
 					text-decoration: none;
-				}
-			}
 
-			.active:after {
-				background-color: $secondary;
+					&:after {
+						background-color: transparent;
+						bottom: 0;
+						content: '';
+						display: block;
+						height: 3px;
+						left: 0;
+						position: absolute;
+						width: 100%;
+					}
+				}
+
+				.router-link-exact-active:after {
+					background-color: $secondary;
+				}
 			}
 		}
 	}
