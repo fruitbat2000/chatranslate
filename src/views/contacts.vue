@@ -2,7 +2,7 @@
 	<div class="contacts">
 		<h1>Contacts</h1>
 		<template v-if="$store.state.user">
-			<ul v-if="$store.state.user.contacts.length > 0">
+			<ul v-if="$store.state.user.contacts.length > 0" class="contacts__list">
 				<li v-for="contact in $store.state.user.contacts" :key="contact">
 					<user-card :uid="contact" class="layer-1"></user-card>
 				</li>
@@ -36,3 +36,11 @@ export default {
 	}
 }
 </script>
+<style lang="scss">
+	.contacts {
+		.contacts__list li {
+			margin-bottom: 10px;
+		}
+	}
+</style>
+
