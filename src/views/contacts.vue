@@ -9,7 +9,7 @@
 			</ul>
 			<p v-else>You have no contacts,
 				<router-link to="/invite">invite</router-link>
-				 someone to chat with!
+					someone to chat with!
 			</p>
 		</template>
 	</div>
