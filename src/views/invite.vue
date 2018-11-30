@@ -11,19 +11,26 @@
 				<button @click.prevent="createInvite" class="btn btn--primary">Submit</button>
 			</form>
 		</section>
-		<section>
+		<section v-if="$store.state.user">
 			<h2>Pending invitations</h2>
-			<p>next up: pending invites, clearing invite queue after acceptance etc</p>
+			<ul v-if="$store.state.user.pendingInvites.length > 0">
+				<li v-for="invite in $store.state.user.pendingInvites" :key="invite.invite">
+					<user-card :uid="invite.inviteFrom" class="layer-1" />
+				</li>
+			</ul>
+			<p v-else>You have no pending invitations</p>
 		</section>
 	</div>
 </template>
 
 <script>
 import firebase from "firebase/app";
+import userCard from '@/components/userCard'
 
 export default {
 	name: 'invite',
 	components: {
+		userCard
 	},
 	data() {
 		return {
@@ -93,11 +100,12 @@ export default {
 	}
 
 	#email {
+		padding-top: 7px;
 		width: 100%;
 	}
 
 	.btn {
-		height: 38px;
+		height: 40px;
 	}
 
 	.error {
