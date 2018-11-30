@@ -1,12 +1,12 @@
 <template>
 	<div class="chat-card">
-    <img v-if="members[0].avatar" class="chat-card__image" :src="members[0].avatar" alt="">
+    <img v-if="members.length > 0 && members[0].avatar" class="chat-card__image" :src="members[0].avatar" alt="">
     <i v-else class="material-icons no-avatar">person</i>
     <div class="chat-card__info">
       <h3><span v-for="member in members" :key="member.uid">{{member.displayName}}</span></h3>
       <p>{{ lastMessage }}</p>
     </div>
-		<p v-if="!user">Cannot retrieve user info</p>
+		<p v-if="!chat">Cannot retrieve chat info</p>
 	</div>
 </template>
 

@@ -4,7 +4,7 @@
 		<div class="chats">
 			<ul v-if="user.chats.length > 0" class="chats__list">
 				<li @click="openChat(chat)" v-for="chat in user.chats" :key="chat">
-					<chat-card :uid="chat" />
+					<chat-card :uid="chat" class="layer-1" />
 				</li>
 			</ul>
 			<div v-else class="chats__no-chats">You have no active conversations. Start chatting with someone by clicking the button below. Or <router-link to="/invite">invite</router-link> someone new to chat with.</div>

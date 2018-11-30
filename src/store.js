@@ -34,6 +34,7 @@ export default new Vuex.Store({
 	actions: {
 		getUser({commit, state}, payload) {
 			let userDoc = state.db.collection('users').doc(payload.user.uid);
+			let [lang, locale] = (((navigator.userLanguage || navigator.language).replace('-', '_')).toLowerCase()).split('_');
 
 			userDoc.get().then(function(doc) {
 				if (doc.exists) {
@@ -47,7 +48,8 @@ export default new Vuex.Store({
 						chats: [],
 						pendingInvites: [],
 						avatar: null,
-						primaryLanguage: null,
+						primaryLanguage: lang,
+						locale: locale,
 						displayName: payload.user.displayName,
 						email: payload.user.email,
 						verified: payload.user.emailVerified,
