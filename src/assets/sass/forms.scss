@@ -1,0 +1,27 @@
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  border: 1px solid $primaryDark;
+  border-radius: 3px;
+  box-shadow: none;
+  box-sizing: border-box;
+  outline: none;
+  padding: 5px 10px 10px;
+
+  &:focus {
+    border-color: $secondary;
+  }
+}
+
+.input-grp {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.error {
+  @include font-size(12);
+  bottom: 0;
+  color: $secondaryDark;
+  left: 0;
+  position: absolute;
+}

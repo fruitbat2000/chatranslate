@@ -4,9 +4,11 @@
 			<h2>Invite your friends to chat</h2>
 			<p v-if="$route.params.id">{{$route.params.id}} {{$route.name}}</p>
 			<form>
-				<input type="email" name="email" id="email" placeholder="Enter email address" v-model="email">
-				<span v-if="validated && !emailValid">Please enter a valid email address</span>
-				<button @click.prevent="createInvite">Submit</button>
+				<div class="input-grp">
+					<input type="email" name="email" id="email" placeholder="Enter email address" v-model="email">
+					<span v-if="validated && !emailValid" class="error">Please enter a valid email address</span>
+				</div>
+				<button @click.prevent="createInvite" class="btn btn--primary">Submit</button>
 			</form>
 		</section>
 		<section>
@@ -66,3 +68,25 @@ export default {
 	}
 }
 </script>
+<style lang="scss">
+	form {
+		align-items: flex-start;
+		display: flex;
+	}
+	.input-grp {
+		flex-grow: 2;
+		margin-right: 10px;
+	}
+
+	#email {
+		width: 100%;
+	}
+
+	.btn {
+		height: 38px;
+	}
+
+	.error {
+		display: block;
+	}
+</style>
