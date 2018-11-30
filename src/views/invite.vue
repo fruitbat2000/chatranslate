@@ -1,12 +1,18 @@
 <template>
 	<div class="invite">
-		<h2>invite your friends to chat</h2>
-		<p v-if="$route.params.id">{{$route.params.id}} {{$route.name}}</p>
-		<form>
-			<input type="email" name="email" id="email" placeholder="Enter email address" v-model="email">
-			<span v-if="validated && !emailValid">Please enter a valid email address</span>
-			<button @click.prevent="createInvite">Submit</button>
-		</form>
+		<section>
+			<h2>Invite your friends to chat</h2>
+			<p v-if="$route.params.id">{{$route.params.id}} {{$route.name}}</p>
+			<form>
+				<input type="email" name="email" id="email" placeholder="Enter email address" v-model="email">
+				<span v-if="validated && !emailValid">Please enter a valid email address</span>
+				<button @click.prevent="createInvite">Submit</button>
+			</form>
+		</section>
+		<section>
+			<h2>Pending invitations</h2>
+			<p>next up: pending invites, clearing invite queue after acceptance etc</p>
+		</section>
 	</div>
 </template>
 
