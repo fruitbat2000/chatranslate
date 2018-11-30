@@ -70,6 +70,8 @@ export default {
 											inviteFrom: invite.fromUid
 										})
 									});
+
+									this.email = ''
 								}
 							})
 							.catch(err => {

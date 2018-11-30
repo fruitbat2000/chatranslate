@@ -11,6 +11,10 @@ input[type="password"] {
   &:focus {
     border-color: $secondary;
   }
+
+  &::placeholder {
+    color: $logotype;
+  }
 }
 
 .input-grp {
