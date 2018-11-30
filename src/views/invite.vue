@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
 
 export default {
 	name: 'invite',
@@ -50,14 +51,27 @@ export default {
 
 				this.db.collection('invites').add(invite)
 					.then((docRef) => {
-						console.log('yay!', docRef)
+						this.db.collection('users').where("email", "==", invite.to)
+							.get()
+							.then((snapshot) => {
+								if (!snapshot.empty) {
+									let userDoc = this.db.collection('users').doc(snapshot.docs[0].id);
+
+									userDoc.update({
+										pendingInvites: firebase.firestore.FieldValue.arrayUnion({
+											invite: docRef.id,
+											inviteFrom: invite.fromUid
+										})
+									});
+								}
+							})
+							.catch(err => {
+								console.log(err);
+							});
 					})
 					.catch((err) => {
 						console.log(err);
 					});
-
-
-				console.log(invite);
 			}
 		}
 	},
