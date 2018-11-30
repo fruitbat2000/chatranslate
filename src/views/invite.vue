@@ -92,25 +92,27 @@ export default {
 }
 </script>
 <style lang="scss">
-	form {
-		align-items: flex-start;
-		display: flex;
-	}
-	.input-grp {
-		flex-grow: 2;
-		margin-right: 10px;
-	}
+	.invite {
+		form {
+			align-items: flex-start;
+			display: flex;
+		}
+		.input-grp {
+			flex-grow: 2;
+			margin-right: 10px;
+		}
 
-	#email {
-		padding-top: 7px;
-		width: 100%;
-	}
+		#email {
+			padding-top: 7px;
+			width: 100%;
+		}
 
-	.btn {
-		height: 40px;
-	}
+		.btn {
+			height: 40px;
+		}
 
-	.error {
-		display: block;
+		.error {
+			display: block;
+		}
 	}
 </style>

@@ -3,7 +3,7 @@
 		<h1>Contacts</h1>
 		<template v-if="$store.state.user">
 			<ul v-if="$store.state.user.contacts.length > 0" class="contacts__list">
-				<li v-for="contact in $store.state.user.contacts" :key="contact">
+				<li @click="startChat(contact)" v-for="contact in $store.state.user.contacts" :key="contact">
 					<user-card :uid="contact" class="layer-1"></user-card>
 				</li>
 			</ul>
@@ -26,6 +26,11 @@ export default {
 	data() {
 		return {
 
+		}
+	},
+	methods: {
+		startChat(contact) {
+			console.log('startChat', contact)
 		}
 	},
 	mounted() {
