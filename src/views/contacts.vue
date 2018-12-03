@@ -31,7 +31,7 @@ export default {
 	},
 	methods: {
 		startChat(contact) {
-			console.log('startChat - create new chat and attach to users, then redirect to the chat page', contact)
+			console.log('startChat - check if a chat already exists, else create new chat and attach to users, then redirect to the chat page', contact)
 			let chat = {
 					members: [{uid: this.$store.state.user.uid, lang: 'en'}, {uid: contact, lang: 'es'}],
 					messages: []
