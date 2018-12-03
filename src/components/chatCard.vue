@@ -27,26 +27,8 @@
 		},
 		mounted() {
 			console.log('chatCard mounted', this.chat);
-			//this.filterUsers();
 		},
-		methods: {
-      filterUsers() {
-        let currentUser = this.$store.state.user.uid;
-        this.chat.data.members.forEach(member => {
-          if (member.uid !== currentUser) {
-            let memberDoc = this.$store.state.db.collection('users').doc(member.uid)
-            memberDoc.get()
-              .then(doc => {
-                this.members.push(doc.data());
-              })
-              .catch(err => {
-                console.log(err)
-              })
-            console.log(this.members)
-          }
-        });
-      }
-		},
+		methods: {},
 		filters: {
 			prettyDate(timestamp) {
 				let date = new Date(timestamp),

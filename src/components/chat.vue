@@ -10,8 +10,9 @@
         {{ msg.text }}, {{ msg.from }}, {{ msg.timestamp }}
       </div>
     </div>
-    <div class="chat__input layer-1">
+    <div class="chat__input input-grp layer-1">
       <input type="text" v-model="newMessage" placeholder="Enter text">
+      <button @click.prevent="createMsg" class="btn btn--primary btn--round"><i class="material-icons">send</i></button>
     </div>
 	</div>
 </template>
@@ -35,7 +36,11 @@ export default {
       newMessage: ''
     }
 	},
-	methods: {},
+	methods: {
+    createMsg() {
+      console.log('createMsg');
+    }
+  },
 	mounted() {
     console.log('chat mounted');
   },
@@ -59,7 +64,7 @@ export default {
 
     header {
       background: $primary;
-      padding: 10px 20px;
+      padding: 20px;
 
       h3 {
         margin: 0;
@@ -70,6 +75,7 @@ export default {
       background: $primaryDark;
       bottom: 0;
       box-sizing: border-box;
+      display: flex;
       left: 0;
       padding: 10px 20px;
       position: absolute;
@@ -77,6 +83,7 @@ export default {
 
       input {
         box-sizing: border-box;
+        margin-right: 10px;
         width: 100%;
       }
     }
