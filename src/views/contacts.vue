@@ -65,6 +65,7 @@ export default {
 			//		original: '',
 			//		language: '',
 			//		from: '',
+			//		timestamp: '',
 			//		translations: [{lang: '', text: ''},{lang: '', text: ''}]
 			//	}]
 		}

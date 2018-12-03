@@ -1,16 +1,16 @@
 <template>
 	<div class="chat">
-    <header>
+    <header class="layer-1">
       <h3 v-if="chatLoaded">
         <span v-for="member in members" :key="member.uid">{{ member.displayName }}</span>
       </h3>
     </header>
     <div class="chat__messages">
       <div v-for="(index, msg) in chat.messages" :key="index" class="chat__message">
-        {{ msg }}
+        {{ msg.text }}, {{ msg.from }}, {{ msg.timestamp }}
       </div>
     </div>
-    <div class="chat__input">
+    <div class="chat__input layer-1">
       <input type="text" v-model="newMessage" placeholder="Enter text">
     </div>
 	</div>
@@ -91,13 +91,26 @@ export default {
     top: 0;
     width: 100vw;
 
+    header {
+      background: $primary;
+      padding: 10px 20px;
+
+      h3 {
+        margin: 0;
+      }
+    }
+
     .chat__input {
+      background: $primaryDark;
       bottom: 0;
-      position: absolute;
+      box-sizing: border-box;
       left: 0;
+      padding: 10px 20px;
+      position: absolute;
       width: 100%;
 
       input {
+        box-sizing: border-box;
         width: 100%;
       }
     }
