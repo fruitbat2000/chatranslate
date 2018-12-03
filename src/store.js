@@ -9,7 +9,9 @@ export default new Vuex.Store({
 		authInitiated: false,
 		user: null,
 		db: null,
-		redirectUrl: null
+		redirectUrl: null,
+		contacts: null,
+		chats: null
 	},
 	mutations: {
 		setAuthUi(state, payload) {
@@ -22,6 +24,9 @@ export default new Vuex.Store({
 		updateUser(state, payload) {
 			state.user[payload.property] = payload.value;
 		},
+		setContacts(state, payload) {
+			state.contacts = payload;
+		},
 		setDbInstance(state, payload) {
 			state.db = payload.db;
 		},
@@ -32,7 +37,7 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
-		getUser({commit, state}, payload) {
+		getUser({commit, dispatch, state}, payload) {
 			let userDoc = state.db.collection('users').doc(payload.user.uid);
 			let [lang, locale] = (((navigator.userLanguage || navigator.language).replace('-', '_')).toLowerCase()).split('_');
 
@@ -40,6 +45,7 @@ export default new Vuex.Store({
 				if (doc.exists) {
 
 					commit('setUser', doc.data());
+					dispatch('getContacts', payload.user.uid);
 
 				} else {
 
@@ -71,6 +77,31 @@ export default new Vuex.Store({
 			}).catch(function(error) {
 				console.log("Error getting document:", error);
 			});
+		},
+		getContacts({commit, state}, payload) {
+			state.db.collection('users').doc(payload)
+				.onSnapshot(doc => {
+					let tmp = [],
+							total = doc.data().contacts.length,
+							length = 0;
+
+					doc.data().contacts.forEach(contact => {
+						state.db.collection('users').doc(contact)
+							.get()
+							.then(doc => {
+								length ++
+								tmp.push(doc.data())
+
+								if (length === total) {
+									console.log('all finished', tmp);
+									commit('setContacts', tmp);
+								}
+							})
+							.catch(err => {
+								console.log(err);
+							})
+					});
+				})
 		}
 	}
 })
