@@ -1,8 +1,8 @@
 <template>
 	<div class="chat">
     <header class="layer-1">
-      <h3 v-if="members.length > 0">
-        <span v-for="member in members" :key="member.uid">{{ member.displayName }}</span>
+      <h3>
+        <span v-for="member in chat.data.members" :key="member.uid" v-if="member.uid !== $store.state.user.uid">{{ member.displayName }}</span>
       </h3>
     </header>
     <div class="chat__messages">
@@ -35,29 +35,10 @@ export default {
       newMessage: ''
     }
 	},
-	methods: {
-    filterUsers() {
-      let currentUser = this.$store.state.user.uid;
-
-      this.chat.data.members.forEach(member => {
-        if (member.uid !== currentUser) {
-          let memberDoc = this.db.collection('users').doc(member.uid)
-          memberDoc.get()
-            .then(doc => {
-              this.members.push(doc.data());
-            })
-            .catch(err => {
-              console.log(err)
-            })
-          console.log(this.members)
-        }
-      });
-    }
-  },
+	methods: {},
 	mounted() {
     console.log('chat mounted');
-    this.filterUsers();
-	},
+  },
 	computed: {
 		
 	}

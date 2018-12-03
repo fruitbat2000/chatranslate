@@ -33,11 +33,11 @@ export default {
 		startChat(contact) {
 			console.log('startChat - check if a chat already exists, else create new chat and attach to users, then redirect to the chat page', contact)
 			let chat = {
-					members: [{uid: this.$store.state.user.uid, lang: 'en'}, {uid: contact, lang: 'es'}],
+					members: [this.$store.state.user, contact],
 					messages: []
 				},
 				currentUserDoc = this.db.collection('users').doc(this.$store.state.user.uid),
-				contactDoc = this.db.collection('users').doc(contact)
+				contactDoc = this.db.collection('users').doc(contact.uid)
 
 			this.db.collection('chats').add(chat)
 				.then(docRef => {

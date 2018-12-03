@@ -36,13 +36,14 @@ export default new Vuex.Store({
 		},
 		updateChats(state, payload) {
 			console.log('updateChats', payload);
-			let i = state.chats.findIndex(x => x.id === payload.id);
+			/* let i = state.chats.findIndex(x => x.id === payload.id);
 
 			if (i >= 0) {
 				state.chats[i] = payload
 			} else {
 				state.chats.push(payload);
-			}
+			} */
+			state.chats = payload;
 		}
 	},
 	actions: {
@@ -115,13 +116,14 @@ export default new Vuex.Store({
 		},
 		getChats({commit, state}, payload) {
 			if (payload.length > 0) {
-				payload.forEach(id => {
-					state.db.collection('chats').doc(id)
-						.onSnapshot(doc => {
-							console.log('new snapshot');
-							commit('updateChats', { data: doc.data(), id: doc.id })
+				state.db.collection('chats')
+					.onSnapshot(querySnapshot => {
+						let tmp = [];
+						querySnapshot.docs.forEach(doc => {
+							tmp.push({id: doc.id, data: doc.data()})
 						})
-				});
+						commit('updateChats', tmp)
+					})
 			}
 		}
 	}

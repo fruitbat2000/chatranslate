@@ -1,9 +1,9 @@
 <template>
 	<div class="chat-card">
-    <img v-if="members.length > 0 && members[0].avatar" class="chat-card__image" :src="members[0].avatar" alt="">
+    <img v-if="chat.data.members.length > 0 && chat.data.members[0].avatar" class="chat-card__image" :src="chat.data.members[0].avatar" alt="">
     <i v-else class="material-icons no-avatar">person</i>
     <div class="chat-card__info">
-      <h3><span v-for="member in members" :key="member.uid">{{member.displayName}}</span></h3>
+      <h3><span v-for="member in chat.data.members" :key="member.uid" v-if="member.uid !== $store.state.user.uid">{{member.displayName}}</span></h3>
       <p v-if="chat.data.messages.length > 0">{{ chat.data.messages[0].text }}</p>
     </div>
 	</div>
@@ -23,13 +23,11 @@
 			}
 		},
 		data() {
-			return {
-        members: []
-      }
+			return {}
 		},
 		mounted() {
 			console.log('chatCard mounted', this.chat);
-			this.filterUsers();
+			//this.filterUsers();
 		},
 		methods: {
       filterUsers() {
