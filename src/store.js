@@ -11,7 +11,7 @@ export default new Vuex.Store({
 		db: null,
 		redirectUrl: null,
 		contacts: null,
-		chats: null
+		chats: []
 	},
 	mutations: {
 		setAuthUi(state, payload) {
@@ -34,6 +34,16 @@ export default new Vuex.Store({
 			console.log('setRedirect', payload);
 			state.redirectUrl = payload.path
 			localStorage.setItem('redirectUrl', payload.path);
+		},
+		updateChats(state, payload) {
+			console.log('updateChats', payload);
+			let i = state.chats.findIndex(x => x.id === payload.id);
+
+			if (i >= 0) {
+				state.chats[i] = payload
+			} else {
+				state.chats.push(payload);
+			}
 		}
 	},
 	actions: {
@@ -46,6 +56,7 @@ export default new Vuex.Store({
 
 					commit('setUser', doc.data());
 					dispatch('getContacts', payload.user.uid);
+					dispatch('getChats', doc.data().chats);
 
 				} else {
 
@@ -102,6 +113,17 @@ export default new Vuex.Store({
 							})
 					});
 				})
+		},
+		getChats({commit, state}, payload) {
+			if (payload.length > 0) {
+				payload.forEach(id => {
+					state.db.collection('chats').doc(id)
+						.onSnapshot(doc => {
+							console.log('new snapshot');
+							commit('updateChats', { data: doc.data(), id: doc.id })
+						})
+				});
+			}
 		}
 	}
 })
