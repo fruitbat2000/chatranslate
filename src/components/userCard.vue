@@ -1,14 +1,11 @@
 <template>
 	<div class="user-card">
-
 		<img v-if="contact.avatar" class="user-card__image" :src="contact.avatar" alt="">
 		<i v-else class="material-icons no-avatar">person</i>
 		<div class="user-card__info">
 			<h3>{{contact.displayName}}</h3>
 			<p>Member since: {{contact.joined | prettyDate}}</p>
 		</div>
-
-
 	</div>
 </template>
 

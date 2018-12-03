@@ -4,9 +4,8 @@
     <i v-else class="material-icons no-avatar">person</i>
     <div class="chat-card__info">
       <h3><span v-for="member in members" :key="member.uid">{{member.displayName}}</span></h3>
-      <p>{{ lastMessage }}</p>
+      <p v-if="chat.data.messages.length > 0">{{ chat.data.messages[0].text }}</p>
     </div>
-		<p v-if="!chat">Cannot retrieve chat info</p>
 	</div>
 </template>
 
@@ -18,46 +17,26 @@
 
 		},
 		props: {
-			uid: {
+			chat: {
 				required: true,
-				type: String
+				type: Object
 			}
 		},
 		data() {
 			return {
-				db: this.$store.state.db,
-				chatLoaded: false,
-        chat: {},
-        user: {},
-        members: [],
-        lastMessage: ''
-			}
+        members: []
+      }
 		},
 		mounted() {
-			console.log('chatCard mounted', this.uid);
-			this.getChat();
+			console.log('chatCard mounted', this.chat);
+			this.filterUsers();
 		},
 		methods: {
-			getChat() {
-				let chatDoc = this.db.collection('chats').doc(this.uid);
-
-				chatDoc.get().then((doc) => {
-					if (doc.exists) {
-            this.chat = doc.data();
-            this.lastMessage = this.chat.messages[0]
-            this.filterUsers();
-					} else {
-						this.chat = null;
-          }
-          
-					this.chatLoaded = true;
-				});
-      },
       filterUsers() {
         let currentUser = this.$store.state.user.uid;
-        this.chat.members.forEach(member => {
+        this.chat.data.members.forEach(member => {
           if (member.uid !== currentUser) {
-            let memberDoc = this.db.collection('users').doc(member.uid)
+            let memberDoc = this.$store.state.db.collection('users').doc(member.uid)
             memberDoc.get()
               .then(doc => {
                 this.members.push(doc.data());

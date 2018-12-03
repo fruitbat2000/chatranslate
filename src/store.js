@@ -31,7 +31,6 @@ export default new Vuex.Store({
 			state.db = payload.db;
 		},
 		setRedirectUrl(state, payload) {
-			console.log('setRedirect', payload);
 			state.redirectUrl = payload.path
 			localStorage.setItem('redirectUrl', payload.path);
 		},
