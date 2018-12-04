@@ -12,62 +12,87 @@
 					someone to chat with!
 			</p>
 		</template>
+		<chat v-if="chatOpen" :chat="$store.state.chats[this.chat]" @chat::close="closeChat" />
 	</div>
 </template>
 
 <script>
 import firebase from "firebase/app";
 import userCard from '@/components/userCard'
+import chat from '@/components/chat'
 
 export default {
 	name: 'contacts',
 	components: {
-		userCard
+		userCard,
+		chat
 	},
 	data() {
 		return {
-			db: this.$store.state.db
+			db: this.$store.state.db,
+			chatOpen: false,
+			chat: null
 		}
 	},
 	methods: {
+		openChat(chat) {
+			this.chatOpen = true;
+			this.chat = this.$store.state.chats.indexOf(chat);
+		},
+		closeChat() {
+			this.chatOpen = false;
+			this.chat = null;
+		},
+		findChatByUser(arr, val) {
+			let chat = false;
+
+			arr.forEach(item => {
+				item.data.members.forEach(member => {
+					if (member.uid === val) {
+						chat = item;
+					}
+				})
+			});
+			return chat
+		},
 		startChat(contact) {
-			console.log('startChat - check if a chat already exists, else create new chat and attach to users, then redirect to the chat page', contact)
 			let chat = {
 					members: [this.$store.state.user, contact],
 					messages: []
 				},
 				currentUserDoc = this.db.collection('users').doc(this.$store.state.user.uid),
-				contactDoc = this.db.collection('users').doc(contact.uid)
+				contactDoc = this.db.collection('users').doc(contact.uid),
+				existingChat = this.findChatByUser(this.$store.state.chats, contact.uid )
 
-			this.db.collection('chats').add(chat)
-				.then(docRef => {
-					currentUserDoc.update({
-						chats: firebase.firestore.FieldValue.arrayUnion(docRef.id)
-					});
+			console.log(this.findChatByUser(this.$store.state.chats, contact.uid ))
+			if (existingChat) {
+				this.openChat(existingChat);
+				return
+			} else {
+				// should probably be done from the store
+				this.db.collection('chats').add(chat)
+					.then(docRef => {
+						currentUserDoc.update({
+							chats: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+						});
 
-					contactDoc.update({
-						chats: firebase.firestore.FieldValue.arrayUnion(docRef.id)
-					});
-				})
-				.catch(err => {
-					console.log(err)
-				})
+						contactDoc.update({
+							chats: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+						});
 
-			// a chat would be posted to firebase in it's original language, then
-			// 1. a recipient client would be notified of the new message and then request it in the desired language?
-			// OR
-			// 2. we know the desired language(s) in advance (ie they're set at the beginning of the chat or use a default)
-			// and when the message is posted, translations are created automatically. Only the desired language is displayed
+						let newChat;
 
-			// suspect 2. will be quicker.
-
-			//	messages: [{
-			//		original: '',
-			//		language: '',
-			//		from: '',
-			//		timestamp: '',
-			//		translations: [{lang: '', text: ''},{lang: '', text: ''}]
-			//	}]
+						this.$store.state.chats.forEach(chat => {
+							if (chat.id === docRef.id) {
+								newChat = chat
+							}
+						});
+						this.openChat(newChat);
+					})
+					.catch(err => {
+						console.log(err)
+					})
+			}
 		}
 	},
 	mounted() {
