@@ -11,7 +11,7 @@
 			<div v-else class="chats__no-chats">You have no active conversations. Start chatting with someone by clicking the button below. Or <router-link to="/invite">invite</router-link> someone new to chat with.</div>
 			<router-link to="/contacts" class="btn btn--primary btn--round layer-1 chats__start-chat"><i class="material-icons">chat</i></router-link>
 		</div>
-		<chat v-if="chatOpen" :chat="chat" @chat::close="closeChat" />
+		<chat v-if="chatOpen" :chat="$store.state.chats[this.chat]" @chat::close="closeChat" />
 	</div>
 </template>
 
@@ -36,7 +36,8 @@ export default {
 		openChat(chat) {
 			console.log('openChat', chat);
 			this.chatOpen = true;
-			this.chat = chat;
+			this.chat = this.$store.state.chats.indexOf(chat);
+			console.log(this.chat)
 		},
 		closeChat() {
 			this.chatOpen = false;

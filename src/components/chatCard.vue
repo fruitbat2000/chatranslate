@@ -4,7 +4,7 @@
     <i v-else class="material-icons no-avatar">person</i>
     <div class="chat-card__info">
       <h3><span v-for="member in chat.data.members" :key="member.uid" v-if="member.uid !== $store.state.user.uid">{{member.displayName}}</span></h3>
-      <p v-if="chat.data.messages.length > 0">{{ chat.data.messages[0].original }}</p>
+      <p v-if="chat.data.messages.length > 0">{{ chat.data.messages[chat.data.messages.length -1].original }}</p>
     </div>
 	</div>
 </template>

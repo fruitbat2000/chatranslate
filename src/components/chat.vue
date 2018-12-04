@@ -38,7 +38,6 @@ export default {
 	},
 	methods: {
     createMsg() {
-      console.log('createMsg', this.newMessage);
       let msg = {
         original: this.newMessage,
         language: this.$store.state.user.primaryLanguage,
@@ -67,7 +66,7 @@ export default {
   },
 	computed: {
 		
-	}
+  }
 }
 </script>
 <style lang="scss">
