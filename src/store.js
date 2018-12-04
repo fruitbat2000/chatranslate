@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import firebase from "firebase/app";
 
 Vue.use(Vuex)
 
@@ -47,6 +48,13 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
+		newMessage({state}, payload) {
+			console.log('newMessage', payload)
+			let chatDoc = state.db.collection('chats').doc(payload.chatId)
+			chatDoc.update({
+				messages: firebase.firestore.FieldValue.arrayUnion(payload.msg)
+			})
+		},
 		getUser({commit, dispatch, state}, payload) {
 			let userDoc = state.db.collection('users').doc(payload.user.uid);
 			let [lang, locale] = (((navigator.userLanguage || navigator.language).replace('-', '_')).toLowerCase()).split('_');

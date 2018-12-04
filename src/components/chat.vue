@@ -6,8 +6,8 @@
       </h3>
     </header>
     <div class="chat__messages">
-      <div v-for="(index, msg) in chat.data.messages" :key="index" class="chat__message">
-        {{ msg.text }}, {{ msg.from }}, {{ msg.timestamp }}
+      <div v-for="(msg, index) in chat.data.messages" :key="index" class="chat__message">
+        {{ msg.original }}, {{ msg.from.displayName }}, {{ msg.timestamp | prettyDate }}
       </div>
     </div>
     <div class="chat__input input-grp layer-1">
@@ -38,11 +38,32 @@ export default {
 	},
 	methods: {
     createMsg() {
-      console.log('createMsg');
+      console.log('createMsg', this.newMessage);
+      let msg = {
+        original: this.newMessage,
+        language: this.$store.state.user.primaryLanguage,
+        from: this.$store.state.user,
+        timestamp: Date.now(),
+        translations: []
+      }
+
+      this.$store.dispatch('newMessage', {chatId: this.chat.id, msg: msg});
+      //this.newMessage = '';
+      // fire an action to update the db. with a bit (a lot) of luck, that will automatically update stuff
     }
   },
 	mounted() {
     console.log('chat mounted');
+  },
+  filters: {
+    prettyDate(timestamp) {
+      let date = new Date(timestamp),
+          day = date.getDate(),
+          month = date.getMonth() +1,
+          year = date.getFullYear();
+
+      return day+'/'+month+'/'+year;
+    }
   },
 	computed: {
 		
