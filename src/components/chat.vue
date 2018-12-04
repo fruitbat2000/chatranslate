@@ -87,6 +87,7 @@ export default {
     header {
       background: $primary;
       box-sizing: border-box;
+      color: $logotype;
       height: 65px;
       padding: 20px;
       position: relative;
