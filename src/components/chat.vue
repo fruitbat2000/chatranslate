@@ -2,14 +2,12 @@
 	<div class="chat">
     <header class="layer-1">
       <h3>
+        <i @click="$emit('chat::close')" class="material-icons">arrow_back</i>
         <span v-for="member in chat.data.members" :key="member.uid" v-if="member.uid !== $store.state.user.uid">{{ member.displayName }}</span>
       </h3>
     </header>
-    <div class="chat__messages">
+    <div ref="messages" class="chat__messages">
       <message-card v-for="(msg, index) in chat.data.messages" :key="index" :message="msg" />
-      <!-- <div v-for="(msg, index) in chat.data.messages" :key="index" class="chat__message">
-        {{ msg.original }}, {{ msg.from.displayName }}, {{ msg.timestamp | prettyDate }}
-      </div> -->
     </div>
     <div class="chat__input input-grp layer-1">
       <input type="text" v-model="newMessage" placeholder="Enter text">
@@ -56,7 +54,7 @@ export default {
     }
   },
 	mounted() {
-    console.log('chat mounted');
+    this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
   },
   filters: {
     prettyDate(timestamp) {
@@ -91,9 +89,18 @@ export default {
       box-sizing: border-box;
       height: 65px;
       padding: 20px;
+      position: relative;
+      z-index: 2;
 
       h3 {
+        align-items: center;
+        display: flex;
         margin: 0;
+
+        i {
+          cursor: pointer;
+          margin-right: 10px;
+        }
       }
     }
 

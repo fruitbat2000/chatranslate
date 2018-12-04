@@ -21,9 +21,7 @@
 		data() {
 			return {}
 		},
-		mounted() {
-			console.log('messageCard mounted');
-		},
+		mounted() {},
 		methods: {},
 		filters: {
       prettyDay(timestamp) {
@@ -67,7 +65,7 @@
   
   .message-card--current-user {
     align-self: flex-end;
-    background-color: $secondaryDark;
+    background-color: $primaryDark;
     color: $white;
   }
 	
