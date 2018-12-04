@@ -6,9 +6,10 @@
       </h3>
     </header>
     <div class="chat__messages">
-      <div v-for="(msg, index) in chat.data.messages" :key="index" class="chat__message">
+      <message-card v-for="(msg, index) in chat.data.messages" :key="index" :message="msg" />
+      <!-- <div v-for="(msg, index) in chat.data.messages" :key="index" class="chat__message">
         {{ msg.original }}, {{ msg.from.displayName }}, {{ msg.timestamp | prettyDate }}
-      </div>
+      </div> -->
     </div>
     <div class="chat__input input-grp layer-1">
       <input type="text" v-model="newMessage" placeholder="Enter text">
@@ -18,10 +19,13 @@
 </template>
 
 <script>
+import messageCard from '@/components/messageCard'
 
 export default {
 	name: 'chat',
-	components: {},
+	components: {
+    messageCard
+  },
   props: {
     chat: {
       type: Object,
@@ -47,7 +51,7 @@ export default {
       }
 
       this.$store.dispatch('newMessage', {chatId: this.chat.id, msg: msg});
-      //this.newMessage = '';
+      this.newMessage = '';
       // fire an action to update the db. with a bit (a lot) of luck, that will automatically update stuff
     }
   },
@@ -77,13 +81,15 @@ export default {
     background: $surface;
     height: 100vh;
     left: 0;
-    overflow: scroll;
+    overflow: hidden;
     position: fixed;
     top: 0;
     width: 100vw;
 
     header {
       background: $primary;
+      box-sizing: border-box;
+      height: 65px;
       padding: 20px;
 
       h3 {
@@ -96,6 +102,7 @@ export default {
       bottom: 0;
       box-sizing: border-box;
       display: flex;
+      height: 65px;
       left: 0;
       padding: 10px 20px;
       position: absolute;
@@ -109,7 +116,13 @@ export default {
     }
 
     .chat__messages {
-      padding-bottom: 50px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      height: calc(100vh - 65px - 65px);
+      overflow: scroll;
+      padding: 20px;
     }
 	}
 </style>

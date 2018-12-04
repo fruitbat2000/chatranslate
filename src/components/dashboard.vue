@@ -34,10 +34,8 @@ export default {
 	},
 	methods: {
 		openChat(chat) {
-			console.log('openChat', chat);
 			this.chatOpen = true;
 			this.chat = this.$store.state.chats.indexOf(chat);
-			console.log(this.chat)
 		},
 		closeChat() {
 			this.chatOpen = false;
