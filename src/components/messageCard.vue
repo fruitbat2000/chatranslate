@@ -33,7 +33,7 @@
 			prettyTime(timestamp) {
 				let time = new Date(timestamp),
 						hour = time.getHours() > 9 ? time.getHours() : '0'+ time.getHours(),
-						minutes = time.getMinutes();
+						minutes = time.getMinutes() > 9 ? time.getMinutes() : '0'+ time.getMinutes();
 
 				return hour + ':' + minutes;
 			}
