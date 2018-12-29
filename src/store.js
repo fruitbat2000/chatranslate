@@ -65,6 +65,7 @@ export default new Vuex.Store({
         .get()
         .then(function(doc) {
           if (doc.exists) {
+            console.log('getUser, doc exists')
             commit('setUser', doc.data())
             dispatch('getContacts', payload.user.uid)
             dispatch('getChats', doc.data().chats)
@@ -129,20 +130,31 @@ export default new Vuex.Store({
           })
         })
     },
-    getChats({ commit, state }, payload) {
-      if (payload.length > 0) {
-        state.db.collection('chats').onSnapshot(querySnapshot => {
-          let tmp = []
-          querySnapshot.docs.forEach(doc => {
-            payload.forEach(id => {
-              if (id === doc.id) {
-                tmp.push({ id: doc.id, data: doc.data() })
-              }
-            })
+    getChats({ commit, state }) {
+      state.db.collection('chats').onSnapshot(querySnapshot => {
+        let tmp = []
+        console.log('getChats', querySnapshot.docs)
+        querySnapshot.docs.forEach(doc => {
+          let chat = doc.data()
+          chat.members.forEach(member => {
+            if (member.uid === state.user.uid) {
+              tmp.push({ id: doc.id, data: doc.data() })
+            }
           })
-          commit('updateChats', tmp)
         })
-      }
+        console.log('getChats tmp', tmp)
+
+        // if (state.user.chats.length > 0) {
+        //   querySnapshot.docs.forEach(doc => {
+        //     state.user.chats.forEach(id => {
+        //       if (id === doc.id) {
+        //         tmp.push({ id: doc.id, data: doc.data() })
+        //       }
+        //     })
+        //   })
+        // }
+        commit('updateChats', tmp)
+      })
     },
   },
 })
