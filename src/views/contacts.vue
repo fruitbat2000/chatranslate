@@ -58,7 +58,7 @@ export default {
     startChat(contact) {
       let chat = {
           members: [this.$store.state.user, contact],
-          messages: {},
+          messages: [],
         },
         currentUserDoc = this.db
           .collection('users')

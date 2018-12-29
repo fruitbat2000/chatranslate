@@ -49,9 +49,16 @@ export default new Vuex.Store({
   },
   actions: {
     newMessage({ state }, payload) {
+      console.log('newMessage', payload)
+      // call function here and then do the below in the function instead
+      let translateMessage = firebase
+        .functions()
+        .httpsCallable('translateMessage')
+      translateMessage(payload)
+
       let chatDoc = state.db.collection('chats').doc(payload.chatId)
       chatDoc.update({
-        messages: firebase.firestore.FieldValue.arrayUnion(payload.msg),
+        messages: firebase.firestore.FieldValue.arrayUnion(payload.message),
       })
     },
     getUser({ commit, dispatch, state }, payload) {
@@ -142,17 +149,6 @@ export default new Vuex.Store({
             }
           })
         })
-        console.log('getChats tmp', tmp)
-
-        // if (state.user.chats.length > 0) {
-        //   querySnapshot.docs.forEach(doc => {
-        //     state.user.chats.forEach(id => {
-        //       if (id === doc.id) {
-        //         tmp.push({ id: doc.id, data: doc.data() })
-        //       }
-        //     })
-        //   })
-        // }
         commit('updateChats', tmp)
       })
     },

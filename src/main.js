@@ -4,66 +4,66 @@ import router from './router'
 import store from './store'
 import './registerServiceWorker'
 
-import firebase from "firebase/app";
-import 'firebase/firestore';
-import * as firebaseui from 'firebaseui';
-import 'firebaseui/dist/firebaseui.css';
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/functions'
+import * as firebaseui from 'firebaseui'
+import 'firebaseui/dist/firebaseui.css'
 
 const config = {
-  apiKey: "AIzaSyAbIgWIKY02k19aYWM_TP4q0tdggcZ3qqM",
-  authDomain: "chatranslate-218619.firebaseapp.com",
-  databaseURL: "https://chatranslate-218619.firebaseio.com",
-  projectId: "chatranslate-218619",
-  storageBucket: "chatranslate-218619.appspot.com",
-  messagingSenderId: "666806704863"
-};
+  apiKey: 'AIzaSyAbIgWIKY02k19aYWM_TP4q0tdggcZ3qqM',
+  authDomain: 'chatranslate-218619.firebaseapp.com',
+  databaseURL: 'https://chatranslate-218619.firebaseio.com',
+  projectId: 'chatranslate-218619',
+  storageBucket: 'chatranslate-218619.appspot.com',
+  messagingSenderId: '666806704863',
+}
 
-firebase.initializeApp(config);
+firebase.initializeApp(config)
 
-const db = firebase.firestore();
+const db = firebase.firestore()
 
 db.settings({
-  timestampsInSnapshots: true
-});
+  timestampsInSnapshots: true,
+})
 
-db.enablePersistence()
-  .catch(function(err) {
-    if (err.code == 'failed-precondition') {
-      console.log(err.code);
-    } else if (err.code == 'unimplemented') {
-      console.log(err.code);
-    }
-  });
+db.enablePersistence().catch(function(err) {
+  if (err.code == 'failed-precondition') {
+    console.log(err.code)
+  } else if (err.code == 'unimplemented') {
+    console.log(err.code)
+  }
+})
 
-store.commit('setDbInstance', {db: db});
+store.commit('setDbInstance', { db: db })
 
-const ui = new firebaseui.auth.AuthUI(firebase.auth());
-store.commit('setAuthUi', {authInstance: ui});
+const ui = new firebaseui.auth.AuthUI(firebase.auth())
+store.commit('setAuthUi', { authInstance: ui })
 
-let firstLoad = true;
+let firstLoad = true
 if (!localStorage.redirectUrl) {
-  localStorage.setItem('redirectUrl', '/');
+  localStorage.setItem('redirectUrl', '/')
 }
 
 function init() {
   new Vue({
     router,
     store,
-    render: h => h(App)
+    render: h => h(App),
   }).$mount('#app')
-  firstLoad = false;
+  firstLoad = false
 }
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    store.dispatch('getUser', {user: user});
+    store.dispatch('getUser', { user: user })
   } else {
-    store.commit('setUser', null);
+    store.commit('setUser', null)
   }
 
   if (firstLoad) {
-    init();
+    init()
   }
-});
+})
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
