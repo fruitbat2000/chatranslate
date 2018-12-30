@@ -49,11 +49,15 @@ export default new Vuex.Store({
         .httpsCallable('translateMessage')
 
       translateMessage(payload).then(results => {
-        console.log('newMessage after translation', results.data[0][0])
-      })
+        console.log('newMessage after translation', results)
+        let msg = payload.message
+        payload.langs.forEach((lang, i) => {
+          msg.translations[lang] = results.data[i][0]
+        })
 
-      chatDoc.update({
-        messages: firebase.firestore.FieldValue.arrayUnion(payload.message),
+        chatDoc.update({
+          messages: firebase.firestore.FieldValue.arrayUnion(msg),
+        })
       })
     },
     getUser({ commit, dispatch, state }, payload) {

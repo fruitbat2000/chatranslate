@@ -56,13 +56,14 @@ exports.translateMessage = functions.https.onCall(data => {
 
   data.langs.forEach(lang => {
     if (lang !== data.message.language) {
-      console.log(lang, data.message)
       promises.push(
         translate.translate(data.message.original, {
           from: data.message.language,
           to: lang,
         })
       )
+    } else {
+      promises.push([data.message.original])
     }
   })
   return Promise.all(promises)

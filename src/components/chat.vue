@@ -11,7 +11,12 @@
       </h3>
     </header>
     <div ref="messages" class="chat__messages">
-      <message-card v-for="(msg, index) in chat.data.messages" :key="index" :message="msg"/>
+      <message-card
+        v-for="(msg, index) in chat.data.messages"
+        :key="index"
+        :message="msg"
+        :lang="$store.state.user.primaryLanguage"
+      />
     </div>
     <div class="chat__input input-grp layer-1">
       <input type="text" v-model="newMessage" placeholder="Enter text">
@@ -52,17 +57,22 @@ export default {
           timestamp: Date.now(),
           translations: {},
         },
-        langs = this.chat.data.members.map(member => {
+        allLangs = this.chat.data.members.map(member => {
           return member.primaryLanguage
-        })
+        }),
+        langs = [...new Set(allLangs)]
 
       this.$store.dispatch('newMessage', {
         chatId: this.chat.id,
         message: msg,
         langs: langs,
       })
+
+      this.chat.data.messages.push(msg)
       this.newMessage = ''
-      // fire an action to update the db. with a bit (a lot) of luck, that will automatically update stuff
+      this.$nextTick(() => {
+        this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
+      })
     },
   },
   mounted() {
@@ -79,6 +89,7 @@ export default {
     },
   },
   computed: {},
+  watch: {},
 }
 </script>
 <style lang="scss">
