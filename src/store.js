@@ -37,26 +37,21 @@ export default new Vuex.Store({
     },
     updateChats(state, payload) {
       console.log('updateChats', payload)
-      /* let i = state.chats.findIndex(x => x.id === payload.id);
-
-			if (i >= 0) {
-				state.chats[i] = payload
-			} else {
-				state.chats.push(payload);
-			} */
       state.chats = payload
     },
   },
   actions: {
     newMessage({ state }, payload) {
-      console.log('newMessage', payload)
       // call function here and then do the below in the function instead
+      let chatDoc = state.db.collection('chats').doc(payload.chatId)
       let translateMessage = firebase
         .functions()
         .httpsCallable('translateMessage')
-      translateMessage(payload)
 
-      let chatDoc = state.db.collection('chats').doc(payload.chatId)
+      translateMessage(payload).then(results => {
+        console.log('newMessage after translation', results.data[0][0])
+      })
+
       chatDoc.update({
         messages: firebase.firestore.FieldValue.arrayUnion(payload.message),
       })

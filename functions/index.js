@@ -5,7 +5,10 @@ const mailgun = require('mailgun-js')({
   apiKey: mgConfig.apiKey,
   domain: mgConfig.domain,
 })
-const translate = require('@google-cloud/translate')
+const { Translate } = require('@google-cloud/translate')
+const translate = new Translate({
+  projectId: 'chatranslate-218619',
+})
 
 admin.initializeApp()
 
@@ -48,6 +51,19 @@ exports.sendInvite = functions.firestore
     })
   })
 
-exports.translateMessage = functions.https.onCall((data, context) => {
-  console.log(data.message, data.chatId, data.langs)
+exports.translateMessage = functions.https.onCall(data => {
+  const promises = []
+
+  data.langs.forEach(lang => {
+    if (lang !== data.message.language) {
+      console.log(lang, data.message)
+      promises.push(
+        translate.translate(data.message.original, {
+          from: data.message.language,
+          to: lang,
+        })
+      )
+    }
+  })
+  return Promise.all(promises)
 })
