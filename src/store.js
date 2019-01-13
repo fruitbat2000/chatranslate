@@ -13,6 +13,7 @@ export default new Vuex.Store({
     redirectUrl: null,
     contacts: null,
     chats: [],
+    pageName: '',
   },
   mutations: {
     setAuthUi(state, payload) {
@@ -38,6 +39,9 @@ export default new Vuex.Store({
     updateChats(state, payload) {
       console.log('updateChats', payload)
       state.chats = payload
+    },
+    setPageName(state, payload) {
+      state.pageName = payload
     },
   },
   actions: {

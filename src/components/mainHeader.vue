@@ -55,7 +55,11 @@ export default {
       this.$store.commit('setRedirectUrl', { path: '/' })
     },
   },
-  watch: {},
+  watch: {
+    '$store.state.pageName'() {
+      this.menuOpen = false
+    },
+  },
 }
 </script>
 <style lang="scss">
