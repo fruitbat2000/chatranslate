@@ -68,6 +68,7 @@ export default {
         langs: langs,
       })
 
+      msg.translations[msg.language] = msg.original
       this.chat.data.messages.push(msg)
       this.newMessage = ''
       this.$nextTick(() => {

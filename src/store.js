@@ -42,14 +42,12 @@ export default new Vuex.Store({
   },
   actions: {
     newMessage({ state }, payload) {
-      // call function here and then do the below in the function instead
       let chatDoc = state.db.collection('chats').doc(payload.chatId)
       let translateMessage = firebase
         .functions()
         .httpsCallable('translateMessage')
 
       translateMessage(payload).then(results => {
-        console.log('newMessage after translation', results)
         let msg = payload.message
         payload.langs.forEach((lang, i) => {
           msg.translations[lang] = results.data[i][0]

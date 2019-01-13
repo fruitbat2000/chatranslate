@@ -9,36 +9,30 @@
 </template>
 
 <script>
-  import mainHeader from '@/components/mainHeader';
-  import mainNav from '@/components/mainNav';
+import mainHeader from '@/components/mainHeader'
+import mainNav from '@/components/mainNav'
 
-  export default {
-    name: 'app',
-    components: {
-      mainHeader,
-      mainNav
-    },
-    data() {
-      return {
-        
-      }
-    },
-    mounted() {
-      console.log('app mounted');
-    },
-    methods: {
-      
-    },
-    watch: {
-      
-    }
-  }
+export default {
+  name: 'app',
+  components: {
+    mainHeader,
+    mainNav,
+  },
+  data() {
+    return {}
+  },
+  mounted() {
+    console.log('app mounted')
+  },
+  methods: {},
+  watch: {},
+}
 </script>
 
 <style lang="scss">
-  @import './assets/sass/base';
+@import './assets/sass/base';
 
-  main {
-    padding: 20px;
-  }
+main {
+  padding: 20px;
+}
 </style>
