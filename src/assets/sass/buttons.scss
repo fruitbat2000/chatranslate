@@ -1,40 +1,44 @@
 .btn {
-	background-color: $primaryDark;
-	border: none;
-	border-radius: 2px;
-	box-shadow: none;
-	outline: none;
-	padding: 5px 10px;
-	text-decoration: none;
-	transition: all 0.3s ease-in-out;
+  background-color: $primaryDark;
+  border: none;
+  border-radius: 2px;
+  box-shadow: none;
+  outline: none;
+  padding: 5px 10px;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
 
-	.material-icons {
-		display: block;
-	}
+  .material-icons {
+    display: block;
+  }
 
-	&.btn--primary {
-		background-color: $secondary;
-		color: $secondaryText;
+  &.btn--primary {
+    background-color: $secondary;
+    color: $secondaryText;
 
-		&:hover {
-			background-color: darken($secondary, 10%);
-		}
-	}
+    &:hover {
+      background-color: darken($secondary, 10%);
+    }
+  }
 
-	&.btn--secondary {
-		background-color: $primaryDark;
+  &.btn--secondary {
+    background-color: $primaryDark;
 
-		&:hover {
-			background-color: darken($primaryDark, 10%);
-		}
-	}
+    &:hover {
+      background-color: darken($primaryDark, 10%);
+    }
+  }
 
-	&.btn--round {
-		border-radius: 50%;
-		padding: 8px;
+  &.btn--disabled {
+    opacity: 0.6;
+  }
 
-		.material-icons {
-			@include font-size(30);
-		}
-	}
+  &.btn--round {
+    border-radius: 50%;
+    padding: 8px;
+
+    .material-icons {
+      @include font-size(30);
+    }
+  }
 }

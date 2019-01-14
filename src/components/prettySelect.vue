@@ -1,7 +1,7 @@
 <template>
   <select>
     <option
-      :selected="opt.code === selection"
+      :selected="opt.code === selected"
       v-for="opt in options"
       :value="opt.code"
       :key="opt.code"
@@ -27,12 +27,10 @@ export default {
   },
   data() {
     return {
-      selection: this.selected,
       choices: null,
     }
   },
   mounted() {
-    console.log('prettySelect mounted', this.selected)
     this.choices = new Choices(this.$el)
     this.$el.addEventListener('choice', this.onChoice)
   },
@@ -50,4 +48,8 @@ export default {
 <style lang="scss">
 @import '../assets/sass/variables';
 @import '../assets/sass/mixins';
+
+.choices__inner {
+  box-sizing: border-box;
+}
 </style>

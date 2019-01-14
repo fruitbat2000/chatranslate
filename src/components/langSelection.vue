@@ -1,12 +1,16 @@
 <template>
-  <div class="lang-selection">
+  <div v-if="$store.state.languages" class="lang-selection">
     <pretty-select
-      v-if="$store.state.languages"
+      class="lang-selection__select"
       :selected="$store.state.user.primaryLanguage"
       :options="$store.state.languages"
       @prettySelect::onChoice="newLang"
     />
-    <button @click="setLang" class="btn btn--primary">Set</button>
+    <button
+      @click="setLang"
+      class="btn btn--primary"
+      :class="{'btn--disabled': currentSelection === $store.state.user.primaryLanguage}"
+    >Set</button>
   </div>
 </template>
 
@@ -21,11 +25,10 @@ export default {
   data() {
     return {
       langs: this.$store.state.languages,
-      currentSelection: null,
+      currentSelection: this.$store.state.user.primaryLanguage,
     }
   },
   mounted() {
-    console.log('lang selection mounted', this.langs)
     if (!this.langs) {
       this.$store.dispatch('getLangs')
     }
@@ -35,7 +38,10 @@ export default {
       this.currentSelection = e.value
     },
     setLang() {
-      console.log(this.currentSelection)
+      if (this.currentSelection === this.$store.state.user.primaryLanguage) {
+        return
+      }
+
       this.$store.dispatch('setPrimaryLanguage', this.currentSelection)
     },
   },
@@ -45,4 +51,13 @@ export default {
 <style lang="scss">
 @import '../assets/sass/variables';
 @import '../assets/sass/mixins';
+
+.lang-selection {
+  display: flex;
+
+  .choices {
+    flex-grow: 2;
+    margin: 0 10px 0 0;
+  }
+}
 </style>

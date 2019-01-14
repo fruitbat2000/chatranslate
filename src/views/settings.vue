@@ -1,7 +1,7 @@
 <template>
   <div class="settings">
     <h1>Settings</h1>
-    <p>contact/notification preferences etc will be here</p>
+    <h3>Primary language:</h3>
     <lang-selection v-if="$store.state.user"/>
   </div>
 </template>
