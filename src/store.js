@@ -38,8 +38,13 @@ export default new Vuex.Store({
       localStorage.setItem('redirectUrl', payload.path)
     },
     updateChats(state, payload) {
-      console.log('updateChats', payload)
-      state.chats = payload
+      state.chats.forEach((chat, i) => {
+        if (chat.id === payload.id) {
+          state.chats.splice(i, 1)
+        }
+      })
+      state.chats.push(payload)
+      console.log('updateChats', payload, state.chats)
     },
     setPageName(state, payload) {
       state.pageName = payload
@@ -163,28 +168,16 @@ export default new Vuex.Store({
       state.db
         .collection('users')
         .doc(state.user.uid)
-        .onSnapshot(doc => {
-          let chats = doc.data().chats,
-            promises = []
+        .get()
+        .then(doc => {
+          let chats = doc.data().chats
 
           chats.forEach(chat => {
-            promises.push(
-              state.db
-                .collection('chats')
-                .doc(chat)
-                .get()
-                .then(doc => {
-                  return { id: doc.id, data: doc.data() }
-                })
-                .catch(err => {
-                  console.log(err)
-                })
-            )
-          })
+            let chatDoc = state.db.collection('chats').doc(chat)
 
-          Promise.all(promises).then(data => {
-            commit('updateChats', data)
-            console.log(data)
+            chatDoc.onSnapshot(doc => {
+              commit('updateChats', { id: doc.id, data: doc.data() })
+            })
           })
         })
     },
