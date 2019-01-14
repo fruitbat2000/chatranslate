@@ -181,5 +181,15 @@ export default new Vuex.Store({
           })
         })
     },
+    watchChat({ commit, state }, payload) {
+      let chatDoc = state.db.collection('chats').doc(payload)
+
+      return new Promise(resolve => {
+        chatDoc.onSnapshot(doc => {
+          commit('updateChats', { id: doc.id, data: doc.data() })
+          resolve({ id: doc.id, data: doc.data() })
+        })
+      })
+    },
   },
 })

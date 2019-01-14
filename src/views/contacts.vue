@@ -84,15 +84,15 @@ export default {
               chats: firebase.firestore.FieldValue.arrayUnion(docRef.id),
             })
 
-            let newChat
-
-            this.$store.state.chats.forEach(chat => {
-              if (chat.id === docRef.id) {
-                newChat = chat
-              }
+            this.$store.dispatch('watchChat', docRef.id).then(() => {
+              let newChat
+              this.$store.state.chats.forEach(chat => {
+                if (chat.id === docRef.id) {
+                  newChat = chat
+                }
+              })
+              this.openChat(newChat)
             })
-
-            this.openChat(newChat)
           })
           .catch(err => {
             console.log(err)
