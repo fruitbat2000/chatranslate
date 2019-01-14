@@ -38,12 +38,17 @@ export default new Vuex.Store({
       localStorage.setItem('redirectUrl', payload.path)
     },
     updateChats(state, payload) {
-      state.chats.forEach((chat, i) => {
+      let found = false
+      state.chats.forEach(chat => {
         if (chat.id === payload.id) {
-          state.chats.splice(i, 1)
+          chat.data = payload.data
+          found = true
         }
       })
-      state.chats.push(payload)
+
+      if (!found) {
+        state.chats.push(payload)
+      }
       console.log('updateChats', payload, state.chats)
     },
     setPageName(state, payload) {
