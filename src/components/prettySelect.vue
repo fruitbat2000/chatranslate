@@ -34,11 +34,16 @@ export default {
   mounted() {
     console.log('prettySelect mounted', this.selected)
     this.choices = new Choices(this.$el)
+    this.$el.addEventListener('choice', this.onChoice)
   },
   destroyed() {
     this.choices.destroy()
   },
-  methods: {},
+  methods: {
+    onChoice(event) {
+      this.$emit('prettySelect::onChoice', event.detail.choice)
+    },
+  },
   watch: {},
 }
 </script>

@@ -4,7 +4,9 @@
       v-if="$store.state.languages"
       :selected="$store.state.user.primaryLanguage"
       :options="$store.state.languages"
+      @prettySelect::onChoice="newLang"
     />
+    <button @click="setLang" class="btn btn--primary">Set</button>
   </div>
 </template>
 
@@ -19,6 +21,7 @@ export default {
   data() {
     return {
       langs: this.$store.state.languages,
+      currentSelection: null,
     }
   },
   mounted() {
@@ -27,7 +30,15 @@ export default {
       this.$store.dispatch('getLangs')
     }
   },
-  methods: {},
+  methods: {
+    newLang(e) {
+      this.currentSelection = e.value
+    },
+    setLang() {
+      console.log(this.currentSelection)
+      this.$store.dispatch('setPrimaryLanguage', this.currentSelection)
+    },
+  },
   watch: {},
 }
 </script>

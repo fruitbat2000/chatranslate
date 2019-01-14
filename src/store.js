@@ -68,8 +68,20 @@ export default new Vuex.Store({
 
       getLangList({ target: state.user.primaryLanguage }).then(langs => {
         state.languages = langs.data[0]
-        console.log(state.languages[0])
       })
+    },
+    setPrimaryLanguage({ commit, state }, payload) {
+      let userDoc = state.db.collection('users').doc(state.user.uid)
+      userDoc
+        .update({
+          primaryLanguage: payload,
+        })
+        .then(() => {
+          commit('updateUser', { property: 'primaryLanguage', value: payload })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     getUser({ commit, dispatch, state }, payload) {
       let userDoc = state.db.collection('users').doc(payload.user.uid)
