@@ -14,6 +14,7 @@ export default new Vuex.Store({
     contacts: null,
     chats: [],
     pageName: '',
+    languages: null,
   },
   mutations: {
     setAuthUi(state, payload) {
@@ -60,6 +61,14 @@ export default new Vuex.Store({
         chatDoc.update({
           messages: firebase.firestore.FieldValue.arrayUnion(msg),
         })
+      })
+    },
+    getLangs({ state }) {
+      let getLangList = firebase.functions().httpsCallable('getLangList')
+
+      getLangList({ target: state.user.primaryLanguage }).then(langs => {
+        state.languages = langs.data[0]
+        console.log(state.languages[0])
       })
     },
     getUser({ commit, dispatch, state }, payload) {

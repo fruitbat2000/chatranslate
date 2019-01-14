@@ -51,6 +51,18 @@ exports.sendInvite = functions.firestore
     })
   })
 
+exports.getLangList = functions.https.onCall(data => {
+  return translate
+    .getLanguages(data.target)
+    .then(result => {
+      console.log(result)
+      return result
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
 exports.translateMessage = functions.https.onCall(data => {
   const promises = []
 

@@ -1,10 +1,10 @@
 <template>
   <select>
     <option
-      :selected="opt.val === selection"
+      :selected="opt.code === selection"
       v-for="opt in options"
-      :value="opt.val"
-      :key="opt.val"
+      :value="opt.code"
+      :key="opt.code"
     >{{opt.name}}</option>
   </select>
 </template>
@@ -28,11 +28,15 @@ export default {
   data() {
     return {
       selection: this.selected,
+      choices: null,
     }
   },
   mounted() {
     console.log('prettySelect mounted', this.selected)
-    const choices = new Choices(this.$el)
+    this.choices = new Choices(this.$el)
+  },
+  destroyed() {
+    this.choices.destroy()
   },
   methods: {},
   watch: {},

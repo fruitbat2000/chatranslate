@@ -1,9 +1,9 @@
 <template>
   <div class="lang-selection">
     <pretty-select
-      v-if="$store.state.user"
+      v-if="$store.state.languages"
       :selected="$store.state.user.primaryLanguage"
-      :options="[{name: 'German', val: 'de'},{name: 'English', val:'en'},{name: 'Spanish', val: 'es'}]"
+      :options="$store.state.languages"
     />
   </div>
 </template>
@@ -17,10 +17,15 @@ export default {
     prettySelect,
   },
   data() {
-    return {}
+    return {
+      langs: this.$store.state.languages,
+    }
   },
   mounted() {
-    console.log('lang selection mounted')
+    console.log('lang selection mounted', this.langs)
+    if (!this.langs) {
+      this.$store.dispatch('getLangs')
+    }
   },
   methods: {},
   watch: {},
