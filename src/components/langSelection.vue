@@ -42,6 +42,7 @@ export default {
         return
       }
 
+      // ultimately primary language will have to be changed on existing chats and messages back-translated
       this.$store.dispatch('setPrimaryLanguage', this.currentSelection)
     },
   },

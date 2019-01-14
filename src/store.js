@@ -160,19 +160,33 @@ export default new Vuex.Store({
         })
     },
     getChats({ commit, state }) {
-      state.db.collection('chats').onSnapshot(querySnapshot => {
-        let tmp = []
-        console.log('getChats', querySnapshot.docs)
-        querySnapshot.docs.forEach(doc => {
-          let chat = doc.data()
-          chat.members.forEach(member => {
-            if (member.uid === state.user.uid) {
-              tmp.push({ id: doc.id, data: doc.data() })
-            }
+      state.db
+        .collection('users')
+        .doc(state.user.uid)
+        .onSnapshot(doc => {
+          let chats = doc.data().chats,
+            promises = []
+
+          chats.forEach(chat => {
+            promises.push(
+              state.db
+                .collection('chats')
+                .doc(chat)
+                .get()
+                .then(doc => {
+                  return { id: doc.id, data: doc.data() }
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+            )
+          })
+
+          Promise.all(promises).then(data => {
+            commit('updateChats', data)
+            console.log(data)
           })
         })
-        commit('updateChats', tmp)
-      })
     },
   },
 })
