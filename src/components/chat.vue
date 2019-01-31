@@ -93,7 +93,7 @@ export default {
       let arr = this.chat.data.members.filter(member => {
         return member.uid !== this.$store.state.user.uid
       })
-      console.log(arr)
+      
       return arr
     }
   },
