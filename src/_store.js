@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import helpers from '@/assets/helpers/generalHelpers'
 import firebase from 'firebase/app'
 
 Vue.use(Vuex)
@@ -12,7 +11,7 @@ export default new Vuex.Store({
     user: null,
     db: null,
     redirectUrl: null,
-    contacts: [],
+    contacts: null,
     chats: [],
     pageName: '',
     languages: null,
@@ -38,20 +37,6 @@ export default new Vuex.Store({
       state.redirectUrl = payload.path
       localStorage.setItem('redirectUrl', payload.path)
     },
-    updateContacts(state, payload) {
-      let found = false
-      state.contacts.forEach(contact => {
-        if (contact.uid === payload.id) {
-          contact = payload.data
-          found = true
-        }
-      })
-
-      if (!found) {
-        state.contacts.push(payload.data)
-      }
-      
-    },
     updateChats(state, payload) {
       let found = false
       state.chats.forEach(chat => {
@@ -64,13 +49,13 @@ export default new Vuex.Store({
       if (!found) {
         state.chats.push(payload)
       }
+      console.log('updateChats', payload, state.chats)
     },
     setPageName(state, payload) {
       state.pageName = payload
     },
   },
   actions: {
-    newChat() {},
     newMessage({ state }, payload) {
       let chatDoc = state.db.collection('chats').doc(payload.chatId)
       let translateMessage = firebase
@@ -95,7 +80,19 @@ export default new Vuex.Store({
         state.languages = langs.data[0]
       })
     },
-    setPrimaryLanguage() {},
+    setPrimaryLanguage({ commit, state }, payload) {
+      let userDoc = state.db.collection('users').doc(state.user.uid)
+      userDoc
+        .update({
+          primaryLanguage: payload,
+        })
+        .then(() => {
+          commit('updateUser', { property: 'primaryLanguage', value: payload })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     getUser({ commit, dispatch, state }, payload) {
       let userDoc = state.db.collection('users').doc(payload.user.uid)
       let [lang, locale] = (navigator.userLanguage || navigator.language)
@@ -105,25 +102,13 @@ export default new Vuex.Store({
 
       userDoc
         .get()
-        .then(doc => {
+        .then(function(doc) {
           if (doc.exists) {
-            // update the local state
-            // set a watch on the user in the db
-            // store should update the db, the db should update the state where possible
+            console.log('getUser, doc exists')
             commit('setUser', doc.data())
-            if (doc.data().chats.length > 0) {
-              doc.data().chats.forEach(chat => dispatch('watchChat', chat))
-            }
-
-            if (doc.data().contacts.length > 0) {
-              doc.data().contacts.forEach(contact => dispatch('watchContact', contact))
-            }
-
-            dispatch('watchUser', payload.user.uid)
+            dispatch('getContacts', payload.user.uid)
+            dispatch('getChats', doc.data().chats)
           } else {
-            // create a new user in the db
-            // watch the new user
-            // db updates the state
             let user = {
               contacts: [],
               chats: [],
@@ -142,22 +127,66 @@ export default new Vuex.Store({
 
             userDoc
               .set(user)
-              .then(() => {
+              .then(function() {
                 // might be better to grab the data back from the db?
                 commit('setUser', user)
-                dispatch('watchUser', payload.user.uid)
+              })
+              .catch(function(error) {
+                console.error('Error writing document: ', error)
+              })
+          }
+        })
+        .catch(function(error) {
+          console.log('Error getting document:', error)
+        })
+    },
+    getContacts({ commit, state }, payload) {
+      state.db
+        .collection('users')
+        .doc(payload)
+        .onSnapshot(doc => {
+          let tmp = [],
+            total = doc.data().contacts.length,
+            length = 0
+
+          doc.data().contacts.forEach(contact => {
+            state.db
+              .collection('users')
+              .doc(contact)
+              .get()
+              .then(doc => {
+                length++
+                tmp.push(doc.data())
+
+                if (length === total) {
+                  console.log('all finished', tmp)
+                  commit('setContacts', tmp)
+                }
               })
               .catch(err => {
                 console.log(err)
               })
-          }
+          })
         })
-        .catch(err => {
-          console.log(err)
+    },
+    getChats({ commit, state }) {
+      state.db
+        .collection('users')
+        .doc(state.user.uid)
+        .get()
+        .then(doc => {
+          let chats = doc.data().chats
+
+          chats.forEach(chat => {
+            let chatDoc = state.db.collection('chats').doc(chat)
+
+            chatDoc.onSnapshot(doc => {
+              commit('updateChats', { id: doc.id, data: doc.data() })
+            })
+          })
         })
     },
     watchChat({ commit, state }, payload) {
-      console.log('watchChat')
       let chatDoc = state.db.collection('chats').doc(payload)
 
       return new Promise(resolve => {
@@ -167,44 +196,5 @@ export default new Vuex.Store({
         })
       })
     },
-    watchContact({ commit, state}, payload) {
-      let contactDoc = state.db.collection('users').doc(payload)
-
-      return new Promise(resolve => {
-        contactDoc.onSnapshot(doc => {
-          commit('updateContacts', { id: doc.id, data: doc.data() })
-          resolve({ id: doc.id, data: doc.data() })
-        })
-      })
-    },
-    watchUser({ commit, state, dispatch }, payload) {
-      // set a watch on the user object and detect changes
-      // if the change refers to adding a new chat or contact, watch these
-      // update the state user object
-      let userDoc = state.db.collection('users').doc(payload)
-
-      userDoc.onSnapshot(doc => {
-        console.log('watchUser', helpers.findUnique(doc.data().chats, state.user.chats))
-        // check if chats have changed
-        if (state.user.chats.join() !== doc.data().chats.join()) {
-          // find the 'new' chat(s) and watch it
-          let arr = helpers.findUnique(doc.data().chats, state.user.chats)
-          arr.forEach(chat => {
-            dispatch('watchChat', chat)
-          })
-        }
-
-        if (state.user.contacts.join() !== doc.data().contacts.join()) {
-          // find the 'new' contact(s) and watch it
-          let arr = helpers.findUnique(doc.data().contacts, state.user.contacts)
-          arr.forEach(contact => {
-            dispatch('watchContact', contact)
-          })
-        }
-
-        // set the user to capture changes on the state
-        commit('setUser', doc.data())
-      })
-    }
-  }
+  },
 })
