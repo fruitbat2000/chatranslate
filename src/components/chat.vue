@@ -4,9 +4,8 @@
       <h3>
         <i @click="$emit('chat::close')" class="material-icons">arrow_back</i>
         <span
-          v-for="member in chat.data.members"
+          v-for="member in otherMembers"
           :key="member.uid"
-          v-if="member.uid !== $store.state.user.uid"
         >{{ member.displayName }}</span>
       </h3>
     </header>
@@ -89,7 +88,15 @@ export default {
       return day + '/' + month + '/' + year
     },
   },
-  computed: {},
+  computed: {
+    otherMembers() {
+      let arr = this.chat.data.members.filter(member => {
+        return member.uid !== this.$store.state.user.uid
+      })
+      console.log(arr)
+      return arr
+    }
+  },
   watch: {},
 }
 </script>
