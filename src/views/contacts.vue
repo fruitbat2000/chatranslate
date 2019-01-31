@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
 import userCard from '@/components/userCard'
 import chat from '@/components/chat'
 
@@ -35,7 +34,6 @@ export default {
   },
   methods: {
     openChat(chat) {
-      console.log('openChat', chat)
       this.chatOpen = true
       this.chat = this.$store.state.chats.indexOf(chat)
     },
@@ -60,43 +58,21 @@ export default {
           members: [this.$store.state.user, contact],
           messages: [],
         },
-        currentUserDoc = this.db
-          .collection('users')
-          .doc(this.$store.state.user.uid),
-        contactDoc = this.db.collection('users').doc(contact.uid),
         existingChat = this.findChatByUser(this.$store.state.chats, contact.uid)
 
-      console.log(this.findChatByUser(this.$store.state.chats, contact.uid))
       if (existingChat) {
         this.openChat(existingChat)
         return
       } else {
-        // should probably be done from the store
-        this.db
-          .collection('chats')
-          .add(chat)
-          .then(docRef => {
-            currentUserDoc.update({
-              chats: firebase.firestore.FieldValue.arrayUnion(docRef.id),
-            })
-
-            contactDoc.update({
-              chats: firebase.firestore.FieldValue.arrayUnion(docRef.id),
-            })
-
-            this.$store.dispatch('watchChat', docRef.id).then(() => {
-              let newChat
-              this.$store.state.chats.forEach(chat => {
-                if (chat.id === docRef.id) {
-                  newChat = chat
-                }
-              })
-              this.openChat(newChat)
-            })
+        this.$store.dispatch('newChat', {chat: chat, contact: contact.uid}).then(data => {
+          let newChat
+          this.$store.state.chats.forEach(chat => {
+            if (chat.id === data.id) {
+              newChat = chat
+            }
           })
-          .catch(err => {
-            console.log(err)
-          })
+          this.openChat(newChat)
+        })
       }
     },
   },

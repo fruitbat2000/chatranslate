@@ -70,7 +70,28 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    newChat() {},
+    newChat({ dispatch, state }, payload) {
+      let currentUserDoc = state.db.collection('users').doc(state.user.uid),
+          contactDoc = state.db.collection('users').doc(payload.contact)
+
+      return new Promise(resolve => {
+        state.db.collection('chats')
+        .add(payload.chat)
+        .then(doc => {
+          currentUserDoc.update({
+            chats: firebase.firestore.FieldValue.arrayUnion(doc.id)
+          })
+
+          contactDoc.update({
+            chats: firebase.firestore.FieldValue.arrayUnion(doc.id)
+          })
+
+          dispatch('watchChat', doc.id).then(data => {
+            resolve(data);
+          })
+        })
+      })
+    },
     newMessage({ state }, payload) {
       let chatDoc = state.db.collection('chats').doc(payload.chatId)
       let translateMessage = firebase
@@ -107,9 +128,6 @@ export default new Vuex.Store({
         .get()
         .then(doc => {
           if (doc.exists) {
-            // update the local state
-            // set a watch on the user in the db
-            // store should update the db, the db should update the state where possible
             commit('setUser', doc.data())
             if (doc.data().chats.length > 0) {
               doc.data().chats.forEach(chat => dispatch('watchChat', chat))
@@ -121,9 +139,6 @@ export default new Vuex.Store({
 
             dispatch('watchUser', payload.user.uid)
           } else {
-            // create a new user in the db
-            // watch the new user
-            // db updates the state
             let user = {
               contacts: [],
               chats: [],
@@ -143,7 +158,6 @@ export default new Vuex.Store({
             userDoc
               .set(user)
               .then(() => {
-                // might be better to grab the data back from the db?
                 commit('setUser', user)
                 dispatch('watchUser', payload.user.uid)
               })
@@ -157,7 +171,6 @@ export default new Vuex.Store({
         })
     },
     watchChat({ commit, state }, payload) {
-      console.log('watchChat')
       let chatDoc = state.db.collection('chats').doc(payload)
 
       return new Promise(resolve => {
@@ -178,16 +191,10 @@ export default new Vuex.Store({
       })
     },
     watchUser({ commit, state, dispatch }, payload) {
-      // set a watch on the user object and detect changes
-      // if the change refers to adding a new chat or contact, watch these
-      // update the state user object
       let userDoc = state.db.collection('users').doc(payload)
 
       userDoc.onSnapshot(doc => {
-        console.log('watchUser', helpers.findUnique(doc.data().chats, state.user.chats))
-        // check if chats have changed
         if (state.user.chats.join() !== doc.data().chats.join()) {
-          // find the 'new' chat(s) and watch it
           let arr = helpers.findUnique(doc.data().chats, state.user.chats)
           arr.forEach(chat => {
             dispatch('watchChat', chat)
@@ -195,14 +202,12 @@ export default new Vuex.Store({
         }
 
         if (state.user.contacts.join() !== doc.data().contacts.join()) {
-          // find the 'new' contact(s) and watch it
           let arr = helpers.findUnique(doc.data().contacts, state.user.contacts)
           arr.forEach(contact => {
             dispatch('watchContact', contact)
           })
         }
 
-        // set the user to capture changes on the state
         commit('setUser', doc.data())
       })
     }
