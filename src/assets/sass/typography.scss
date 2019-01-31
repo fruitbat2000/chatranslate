@@ -29,6 +29,10 @@ ul {
 	padding: 0;
 }
 
+a:visited {
+	color: $logotype;
+}
+
 .bold {
 	font-family: $montBold;
 }
