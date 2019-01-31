@@ -10,9 +10,8 @@
     <div class="chat-card__info">
       <h3>
         <span
-          v-for="member in chat.data.members"
+          v-for="member in otherMembers"
           :key="member.uid"
-          v-if="member.uid !== $store.state.user.uid"
         >{{member.displayName}}</span>
       </h3>
       <p
@@ -35,9 +34,7 @@ export default {
   data() {
     return {}
   },
-  mounted() {
-    console.log('chatCard mounted', this.chat)
-  },
+  mounted() {},
   methods: {},
   filters: {
     prettyDate(timestamp) {
@@ -48,6 +45,15 @@ export default {
 
       return day + '/' + month + '/' + year
     },
+  },
+  computed: {
+    otherMembers() {
+      let arr = this.chat.data.members.filter(member => {
+        return member.uid !== this.$store.state.user.uid
+      })
+
+      return arr
+    }
   },
   watch: {},
 }
