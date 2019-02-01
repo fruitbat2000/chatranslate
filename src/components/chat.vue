@@ -14,7 +14,7 @@
         v-for="(msg, index) in chat.data.messages"
         :key="index"
         :message="msg"
-        :lang="$store.state.user.primaryLanguage"
+        :lang="chat.data.langs[$store.state.user.uid]"
       />
     </div>
     <div class="chat__input input-grp layer-1">
@@ -70,13 +70,13 @@ export default {
       msg.translations[msg.language] = msg.original
       this.chat.data.messages.push(msg)
       this.newMessage = ''
-      this.$nextTick(() => {
-        this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
-      })
     },
   },
   mounted() {
     this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
+    if (this.chat.data.langs[this.$store.state.user.uid] !== this.$store.state.user.primaryLanguage) {
+      alert('lang change')
+    }
   },
   filters: {
     prettyDate(timestamp) {
@@ -97,7 +97,13 @@ export default {
       return arr
     }
   },
-  watch: {},
+  watch: {
+    'chat.data.messages.length'() {
+      this.$nextTick(() => {
+        this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
+      })
+    }
+  },
 }
 </script>
 <style lang="scss">

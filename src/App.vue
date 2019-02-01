@@ -5,18 +5,21 @@
     <main>
       <router-view/>
     </main>
+    <modal />
   </div>
 </template>
 
 <script>
 import mainHeader from '@/components/mainHeader'
 import mainNav from '@/components/mainNav'
+import modal from '@/components/modal'
 
 export default {
   name: 'app',
   components: {
     mainHeader,
     mainNav,
+    modal
   },
   data() {
     return {}
