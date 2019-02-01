@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <header class="layer-1">
+    <header class="chat__header layer-1">
       <h3>
         <i @click="$emit('chat::close')" class="material-icons">arrow_back</i>
         <span
@@ -9,13 +9,20 @@
         >{{ member.displayName }}</span>
       </h3>
       <i @click="menuOpen = !menuOpen" class="material-icons">more_vert</i>
-      <chat-menu v-if="menuOpen" class="layer-1" />
+      <chat-menu 
+        v-if="menuOpen" 
+        class="layer-1" 
+        :lang-updated="langUpdated" 
+        :new-lang="primaryLangName" 
+      />
     </header>
     <div ref="messages" class="chat__messages">
-      <p>It looks as though you have messages in your history that do not match your current language settings. Perhaps you updated your primary language?</p>
-      <p>We've archived them for now. If you want, you can <a href="">translate them to {{ primaryLangName }}</a></p>
+      <div v-if="langUpdated">
+        <p>It looks as though you have messages in your history that do not match your current language settings. Perhaps you updated your primary language?</p>
+        <p>We've hidden them for now. If you want, you can <a href="">translate them to {{ primaryLangName }}</a></p>
+      </div>
       <message-card
-        v-for="(msg, index) in chat.data.messages"
+        v-for="(msg, index) in visibleMessages"
         :key="index"
         :message="msg"
         :lang="$store.state.user.primaryLanguage"
@@ -81,11 +88,21 @@ export default {
     },
   },
   mounted() {
-    console.log(this.chat, this.chat.data.langs[this.$store.state.user.uid], this.$store.state.user.primaryLanguage)
     this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
     if (this.langUpdated) {
       alert('lang change')
     }
+
+    document.addEventListener(
+      'click',
+      event => {
+        let el = document.getElementsByClassName('chat__header')
+        if (!el[0].contains(event.target)) {
+          this.menuOpen = false
+        }
+      },
+      false
+    )
   },
   filters: {
     prettyDate(timestamp) {
@@ -110,6 +127,14 @@ export default {
     },
     primaryLangName() {
       return helpers.getItemByKeyValue(this.$store.state.languages, 'code', this.$store.state.user.primaryLanguage).name
+    },
+    visibleMessages() {
+      let arr = this.chat.data.messages.filter(msg => {
+        let keys = Object.keys(msg.translations)
+        return keys.includes(this.$store.state.user.primaryLanguage)
+      })
+
+      return arr
     }
   },
   watch: {

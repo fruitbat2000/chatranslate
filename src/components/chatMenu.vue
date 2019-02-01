@@ -2,6 +2,7 @@
   <div class="chat-menu">
     <ul class="chat-menu__actions">
       <li @click="$emit('chatMenu::showOriginal')">Show original messages</li>
+      <li>View contact</li>
       <li v-if="langUpdated">Update to {{newLang}}</li>
     </ul>
   </div>
@@ -46,5 +47,21 @@ export default {
   right: 20px;
   top: calc(100% - 20px);
   z-index: 2;
+
+  .chat-menu__actions {
+    li {
+      border-bottom: 1px solid $primaryDark;
+      padding: 5px 0;
+
+      &:first-child {
+        padding-top: 0;
+      }
+
+      &:last-child {
+        border: none;
+        padding-bottom: 0;
+      }
+    }
+  }
 }
 </style>

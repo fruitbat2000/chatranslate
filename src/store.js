@@ -130,18 +130,37 @@ export default new Vuex.Store({
         })
       })
     },
-    setPrimaryLanguage({ commit, state }, payload) {
+    setPrimaryLanguage({ commit, dispatch, state }, payload) {
       let userDoc = state.db.collection('users').doc(state.user.uid)
       userDoc
         .update({
           primaryLanguage: payload,
         })
         .then(() => {
+          dispatch('updateChatLanguage')
           commit('updateUser', { property: 'primaryLanguage', value: payload })
         })
         .catch(err => {
           console.log(err)
         })
+    },
+    updateChatLanguage({ state }) {
+      state.chats.forEach(chat => {
+        let tmp = chat.data.members.filter(member => {
+          return member.uid !== state.user.uid
+        })
+        const user = {
+          displayName: state.user.displayName,
+          uid: state.user.uid,
+          primaryLanguage: state.user.primaryLanguage
+        }
+
+        tmp.push(user)
+        
+        state.db.collection('chats').doc(chat.id).update({
+          members: tmp
+        })
+      })
     },
     getUser({ commit, dispatch, state }, payload) {
       let userDoc = state.db.collection('users').doc(payload.user.uid)
