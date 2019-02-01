@@ -8,6 +8,7 @@
           :key="member.uid"
         >{{ member.displayName }}</span>
       </h3>
+      <i class="material-icons">more_vert</i>
     </header>
     <div ref="messages" class="chat__messages">
       <message-card
@@ -73,6 +74,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.chat, this.chat.data.langs[this.$store.state.user.uid], this.$store.state.user.primaryLanguage)
     this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
     if (this.chat.data.langs[this.$store.state.user.uid] !== this.$store.state.user.primaryLanguage) {
       alert('lang change')
@@ -123,7 +125,9 @@ export default {
     background: $primary;
     box-sizing: border-box;
     color: $logotype;
+    display: flex;
     height: 65px;
+    justify-content: space-between;
     padding: 20px;
     position: relative;
     z-index: 2;

@@ -54,11 +54,30 @@ export default {
       return chat
     },
     startChat(contact) {
-      let chat = {
-          members: [this.$store.state.user, contact],
+      
+      let user = this.$store.state.user,
+        chat = {
+          members: [
+            {
+              uid: user.uid, 
+              displayName: user.displayName, 
+              primaryLanguage: user.primaryLanguage
+            }, 
+            {
+              uid: contact.uid, 
+              displayName: contact.displayName,
+              primaryLanguage: contact.primaryLanguage
+            }
+          ],
           messages: [],
+          langs: {
+            [user.uid]: user.primaryLanguage,
+            [contact.uid]: contact.primaryLanguage
+          }
         },
         existingChat = this.findChatByUser(this.$store.state.chats, contact.uid)
+
+      console.log(chat)
 
       if (existingChat) {
         this.openChat(existingChat)
