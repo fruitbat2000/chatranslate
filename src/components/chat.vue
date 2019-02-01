@@ -8,7 +8,8 @@
           :key="member.uid"
         >{{ member.displayName }}</span>
       </h3>
-      <i class="material-icons">more_vert</i>
+      <i @click="menuOpen = !menuOpen" class="material-icons">more_vert</i>
+      <chat-menu v-if="menuOpen" class="layer-1" />
     </header>
     <div ref="messages" class="chat__messages">
       <message-card
@@ -29,11 +30,13 @@
 
 <script>
 import messageCard from '@/components/messageCard'
+import chatMenu from '@/components/chatMenu'
 
 export default {
   name: 'chat',
   components: {
     messageCard,
+    chatMenu
   },
   props: {
     chat: {
@@ -46,6 +49,7 @@ export default {
       db: this.$store.state.db,
       chatLoaded: false,
       newMessage: '',
+      menuOpen: false
     }
   },
   methods: {

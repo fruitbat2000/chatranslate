@@ -13,7 +13,7 @@
         v-if="$store.state.user.avatar"
         class="main-header__image"
         :src="$store.state.user.avatar"
-        alt
+        alt=""
       >
       <i v-else class="material-icons no-avatar">person</i>
     </button>
