@@ -12,11 +12,13 @@
       <chat-menu v-if="menuOpen" class="layer-1" />
     </header>
     <div ref="messages" class="chat__messages">
+      <p>It looks as though you have messages in your history that do not match your current language settings. Perhaps you updated your primary language?</p>
+      <p>We've archived them for now. If you want, you can <a href="">translate them to {{ primaryLangName }}</a></p>
       <message-card
         v-for="(msg, index) in chat.data.messages"
         :key="index"
         :message="msg"
-        :lang="chat.data.langs[$store.state.user.uid]"
+        :lang="$store.state.user.primaryLanguage"
       />
     </div>
     <div class="chat__input input-grp layer-1">
@@ -31,6 +33,7 @@
 <script>
 import messageCard from '@/components/messageCard'
 import chatMenu from '@/components/chatMenu'
+import helpers from '@/helpers/generalHelpers'
 
 export default {
   name: 'chat',
@@ -80,7 +83,7 @@ export default {
   mounted() {
     console.log(this.chat, this.chat.data.langs[this.$store.state.user.uid], this.$store.state.user.primaryLanguage)
     this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
-    if (this.chat.data.langs[this.$store.state.user.uid] !== this.$store.state.user.primaryLanguage) {
+    if (this.langUpdated) {
       alert('lang change')
     }
   },
@@ -101,6 +104,12 @@ export default {
       })
       
       return arr
+    },
+    langUpdated() {
+      return this.chat.data.langs[this.$store.state.user.uid] !== this.$store.state.user.primaryLanguage
+    },
+    primaryLangName() {
+      return helpers.getItemByKeyValue(this.$store.state.languages, 'code', this.$store.state.user.primaryLanguage).name
     }
   },
   watch: {

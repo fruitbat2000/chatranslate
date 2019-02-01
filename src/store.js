@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import helpers from '@/assets/helpers/generalHelpers'
+import helpers from '@/helpers/generalHelpers'
 import firebase from 'firebase/app'
 
 Vue.use(Vuex)
@@ -68,6 +68,9 @@ export default new Vuex.Store({
     setPageName(state, payload) {
       state.pageName = payload
     },
+    setLanguages(state, payload) { 
+      state.languages = payload.data
+    }
   },
   actions: {
     newChat({ dispatch, state }, payload) {
@@ -109,11 +112,22 @@ export default new Vuex.Store({
         })
       })
     },
-    getLangs({ state }) {
+    getLangs({ state, commit, dispatch }) {
+      state.db.collection('langs').doc('langList').get().then(doc => {
+        if (helpers.checkTimeElapsed(doc.data().timestamp, 24)) {
+          dispatch('updateLangs')
+        }
+        commit('setLanguages', doc.data())
+      })
+    },
+    updateLangs({ state }) {
       let getLangList = firebase.functions().httpsCallable('getLangList')
 
       getLangList({ target: state.user.primaryLanguage }).then(langs => {
-        state.languages = langs.data[0]
+        state.db.collection('langs').doc('langList').set({
+          data: langs.data[0],
+          timestamp: Date.now()
+        })
       })
     },
     setPrimaryLanguage({ commit, state }, payload) {
@@ -177,6 +191,7 @@ export default new Vuex.Store({
                 console.log(err)
               })
           }
+          dispatch('getLangs');
         })
         .catch(err => {
           console.log(err)
