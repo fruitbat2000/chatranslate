@@ -86,6 +86,12 @@ export default {
       this.chat.data.messages.push(msg)
       this.newMessage = ''
     },
+    closeMenu() {
+      let el = document.getElementsByClassName('chat__header')
+      if (!el[0].contains(event.target)) {
+        this.menuOpen = false
+      }
+    }
   },
   mounted() {
     this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
@@ -93,16 +99,10 @@ export default {
       alert('lang change')
     }
 
-    document.addEventListener(
-      'click',
-      event => {
-        let el = document.getElementsByClassName('chat__header')
-        if (!el[0].contains(event.target)) {
-          this.menuOpen = false
-        }
-      },
-      false
-    )
+    document.addEventListener('click', this.closeMenu, false)
+  },
+  destroyed() {
+    document.removeEventListener('click', this.closeMenu)
   },
   filters: {
     prettyDate(timestamp) {
