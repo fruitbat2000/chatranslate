@@ -1,6 +1,11 @@
 <template>
 	<div class="modal" :class="{'modal--open': $store.state.modalOpen}">
-    <div class="modal__window layer-1">modal</div>
+    <div class="modal__window layer-1">
+      <button @click="closeModal" class="modal__close">
+        <i class="material-icons">close</i>
+      </button>
+      {{ $store.state.modal.content }}
+    </div>
     <div class="modal__overlay"></div>
   </div>
 </template>
@@ -13,7 +18,11 @@ export default {
 	data() {
 		return {}
 	},
-	methods: {},
+	methods: {
+    closeModal() {
+      this.$store.commit('closeModal')
+    }
+  },
 	mounted() {},
 	computed: {}
 }
@@ -33,6 +42,14 @@ export default {
 
   &.modal--open {
     opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal__close {
+    padding: 0;
+    position: absolute;
+    right: 5px;
+    top: 5px;
   }
 
   .modal__window {

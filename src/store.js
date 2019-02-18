@@ -16,7 +16,8 @@ export default new Vuex.Store({
     chats: [],
     pageName: '',
     languages: null,
-    modalOpen: false
+    modalOpen: false,
+    modal: {}
   },
   mutations: {
     setAuthUi(state, payload) {
@@ -71,6 +72,14 @@ export default new Vuex.Store({
     },
     setLanguages(state, payload) { 
       state.languages = payload.data
+    },
+    openModal(state, payload) {
+      state.modalOpen = true
+      state.modal = payload
+    },
+    closeModal(state) {
+      state.modalOpen = false
+      state.modal = {}
     }
   },
   actions: {

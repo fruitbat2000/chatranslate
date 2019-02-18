@@ -96,7 +96,7 @@ export default {
   mounted() {
     this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
     if (this.langUpdated) {
-      alert('lang change')
+      this.$store.commit('openModal', {content: 'test modal content'})
     }
 
     document.addEventListener('click', this.closeMenu, false)
