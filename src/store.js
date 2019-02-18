@@ -16,6 +16,7 @@ export default new Vuex.Store({
     chats: [],
     pageName: '',
     languages: null,
+    modalOpen: false
   },
   mutations: {
     setAuthUi(state, payload) {
